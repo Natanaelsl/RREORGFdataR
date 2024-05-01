@@ -18,6 +18,7 @@ output: github_document
 <br />
 
 <!-- badges: start -->
+
 <!-- [![CRAN/METACRAN Version](https://www.r-pkg.org/badges/version/geouy)](https://CRAN.R-project.org/package=geouy) -->
 <!-- [![CRAN/METACRAN Total downloads](https://cranlogs.r-pkg.org/badges/grand-total/geouy?color=blue)](https://CRAN.R-project.org/package=geouy)  -->
 <!-- [![CRAN/METACRAN downloads per month](https://cranlogs.r-pkg.org/badges/geouy?color=orange)](https://CRAN.R-project.org/package=geouy) -->
@@ -27,8 +28,8 @@ output: github_document
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![GitHub R package version (subdirectory of monorepo)](https://img.shields.io/github/r-package/v/Natanaelsl/RREORGFdataR)
+![GitHub License](https://img.shields.io/github/license/Natanaelsl/RREORGFdataR)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Natanaelsl/pagedreport?color=orange)
-![GitHub](https://img.shields.io/github/license/Natanaelsl/RREORGFdataR)
 
 <!-- badges: end -->
 

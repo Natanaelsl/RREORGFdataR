@@ -30,9 +30,10 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![GitHub R package version (subdirectory of
 monorepo)](https://img.shields.io/github/r-package/v/Natanaelsl/RREORGFdataR)
+![GitHub
+License](https://img.shields.io/github/license/Natanaelsl/RREORGFdataR)
 ![GitHub Repo
 stars](https://img.shields.io/github/stars/Natanaelsl/pagedreport?color=orange)
-![GitHub](https://img.shields.io/github/license/Natanaelsl/RREORGFdataR)
 
 <!-- badges: end -->
 
