@@ -6,9 +6,6 @@ output: github_document
 
 # RREORGFdataR
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 **RREORGFdataR** é um pacote R que permite aos usuários acessar facilmente conjuntos de dados fiscais... 
 
 <img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180">
@@ -25,7 +22,6 @@ output: github_document
 <!-- [![CRAN/METACRAN Total downloads](https://cranlogs.r-pkg.org/badges/grand-total/geouy?color=blue)](https://CRAN.R-project.org/package=geouy)  -->
 <!-- [![CRAN/METACRAN downloads per month](https://cranlogs.r-pkg.org/badges/geouy?color=orange)](https://CRAN.R-project.org/package=geouy) -->
 <!-- <br /> -->
-
 <!-- [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/RichDeto/geouy?branch=master&svg=true)](https://ci.appveyor.com/project/RichDeto/geouy) -->
 <!-- [![R](https://github.com/Natanaelsl/NCAGEDdataR/actions/workflows/r.yml/badge.svg)](https://github.com/Natanaelsl/NCAGEDdataR/actions/workflows/r.yml) -->
 
@@ -60,11 +56,11 @@ Este é um exemplo básico que mostra como resolver um problema comum:
 ## Carregando o pacote
 library(RREORGFdataR)
 
-## Download do arquivo .xlsx do NOVO CAGED de Abril/2023 na pasta documentos.
-# NCdata(2023, "Abril", ".../Documents/")
+## Download dos dados do Relatório Resumido da Execução Orçamentária (RREO).
+# RREOdata()
 
-## Gerando lista de 'data.frame' do NOVO CAGED de Abril/2023.
-# NCdata(2023, "Abril")
+## Download dos dados do Relatório de Gestão Fiscal (RGF).
+# RGFdata()
 
 ```
 

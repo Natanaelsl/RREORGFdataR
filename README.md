@@ -3,9 +3,6 @@
 
 # RREORGFdataR
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 **RREORGFdataR** é um pacote R que permite aos usuários acessar
 facilmente conjuntos de dados fiscais…
 
@@ -63,11 +60,11 @@ Este é um exemplo básico que mostra como resolver um problema comum:
 ## Carregando o pacote
 library(RREORGFdataR)
 
-## Download do arquivo .xlsx do NOVO CAGED de Abril/2023 na pasta documentos.
-# NCdata(2023, "Abril", ".../Documents/")
+## Download dos dados do Relatório Resumido da Execução Orçamentária (RREO).
+# RREOdata()
 
-## Gerando lista de 'data.frame' do NOVO CAGED de Abril/2023.
-# NCdata(2023, "Abril")
+## Download dos dados do Relatório de Gestão Fiscal (RGF).
+# RGFdata()
 ```
 
 <!-- --- -->
