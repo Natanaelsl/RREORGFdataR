@@ -1,3 +1,35 @@
+#' RGFdata: Extração intuitiva e fácil dos dados do RGF
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#'
+#' Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
+#'
+#' @param cod.ibge Código IBGE do Ente. se `simplificado = TRUE`, então selecione municípios.
+#' @param ano Exercício do relatório
+#' @param poder Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública
+#' @param periodo Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se `simplificado = TRUE`.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.
+#' @param anexo Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.
+#' @param simplificado Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se `TRUE` a periodicidade semestral será automaticamente selecionada.
+#'
+#'
+#' @export
+#' @examples
+#' # install.packages("devtools")
+#' # devtools::install_github("Natanaelsl/RREORGFdataR")
+#'
+#' # Carregando o pacote
+#' # library(RREORGFdataR)
+#'
+#' # Extraindo dados do anexo 1 para o 3º quadrimestre
+#' # do RGF de 2020 até 2023 do Estado de Goiás para todos os poderes.
+#' # RGFdata(cod.ibge = 52,
+#' #         ano = c(2020:2023),
+#' #         poder = c('E','L','J','D','M'),
+#' #         periodo = 3,
+#' #         anexo = 1,
+#' #         simplificado = FALSE)
 RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, anexo = NULL, simplificado = FALSE){
 
 
