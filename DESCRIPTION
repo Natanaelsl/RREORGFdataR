@@ -18,5 +18,5 @@ Imports:
     glue,
     httr,
     jsonlite,
-    lifecycle,
-    utils
+    utils,
+    lifecycle

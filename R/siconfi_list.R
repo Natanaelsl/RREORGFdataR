@@ -35,11 +35,11 @@ siconfi_list <- function(options = NULL){
 
   # https://raw.githubusercontent.com/Natanaelsl/RREORGFdataR/6e9381012ccb1afad53c80447d56f228f751319e/Cod_instituicoes_siconfi.pdf
 
-  if(!is.null(options) & options != "down") {
-
-    cli::cli_alert_warning("opção inválida!")
-
-  }
+  # if(!is.null(options) | options != "down") {
+  #
+  #   cli::cli_alert_warning("opção inválida!")
+  #
+  # }
 
   if(is.null(options)) {
 
@@ -55,7 +55,7 @@ siconfi_list <- function(options = NULL){
     filename <- "Cod_instituicoes_siconfi.pdf"
 
     # Caminho completo para o arquivo a ser baixado
-    caminho_arquivo <- file.path(choose.dir(), filename)
+    caminho_arquivo <- file.path(utils::choose.dir(), filename)
 
     caminho_arquivo <- gsub("/", "\\\\", caminho_arquivo)
 
