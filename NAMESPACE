@@ -2,5 +2,6 @@
 
 export("%>%")
 export(RGFdata)
+export(siconfi_list)
 importFrom(lifecycle,deprecated)
 importFrom(magrittr,"%>%")

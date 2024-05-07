@@ -1,5 +1,5 @@
 Package: RREORGFdataR
-Title: What the Package Does (One Line, Title Case)
+Title: Extração intuitiva e fácil do RREO e RGF
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
@@ -18,4 +18,5 @@ Imports:
     glue,
     httr,
     jsonlite,
-    lifecycle
+    lifecycle,
+    utils

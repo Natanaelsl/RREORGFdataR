@@ -14,6 +14,8 @@ output: github_document
 
 - `RGFdata`: Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
 
+- `siconfi_list`: Opção padrão `NULL` retorna um `data.frame` contendo os códigos do IBGE e do Siconfi disponíveis para a API, juntamente com as instituições correspondentes. A escolha da opção `options = down` permite o download do arquivo (.pdf) disponibilizado pelo Tesouro Nacional.
+
 
 
 <br />
@@ -84,13 +86,15 @@ O Tesouro Nacional disponibilizou a Application Programming Interface (API) de d
 
 A sintaxe da função `RREORGFdataR` opera com a mesma lógica independentemente da base de interesse, o que torna intuitivo o download/extração de qualquer conjunto de dados usando uma única linha de código.
 
-> **_NOTA:_**  O referido pacote está em fase de construção podendo não ter todas as informações disponíveis para utilização.
 
 ### Código das instituições
 
 A tabela abaixo apresenta os códigos do IBGE e do Siconfi compatíveis com a API, bem como a respectiva instituição. Disponível em: https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf
 
 
+> **_NOTA:_**  O referido pacote está em fase de construção podendo não ter todas as informações disponíveis para utilização.
+
+<!--
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(tabulizer)
 library(dplyr)
@@ -102,6 +106,10 @@ Siconfi_data <- do.call(rbind, lapply(Siconfi_data, as.data.frame)) %>%
   stats::setNames(.[1,]) %>% 
   dplyr::slice(-1)
 
-knitr::kable(Siconfi_data)
+# knitr::kable(Siconfi_data)
 
+saveRDS(Siconfi_data, file = "Cod_instituicoes_siconfi")
+
+readRDS(file = "Cod_instituicoes_siconfi")
 ```
+-->
