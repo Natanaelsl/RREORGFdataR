@@ -4,24 +4,10 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# RREORGFdataR
 
-**RREORGFdataR** é um pacote R que permite aos usuários acessar facilmente o conjunto de dados do Relatório Resumido da Execução Orçamentária (RREO) e do Relatório de Gestão Fiscal (RGF) utilizando a API do SICONFI (https://apidatalake.tesouro.gov.br/docs/siconfi/). Saiba mais sobre a utilização do 'RREORGFdataR' em https://natanaelsl.com.br/project/.
-
-<img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180">
-
-- `RREOdata`: texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto.
-
-- `RGFdata`: Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
-
-- `siconfi_list`: Opção padrão `NULL` retorna um `data.frame` contendo os códigos do IBGE e do Siconfi disponíveis para a API, juntamente com as instituições correspondentes. A escolha da opção `options = down` permite o download do arquivo (.pdf) disponibilizado pelo Tesouro Nacional.
-
-
-
-<br />
+# RREORGFdataR <a href="https://natanaelsl.com.br"><img src="man/figures/Logo_2.png" align="right" height="138" alt="RREORGFdataR_2 website" /></a><a href="https://natanaelsl.com.br"><img src="man/figures/Logo_1.png" align="right" height="138" alt="RREORGFdataR_1 website" /></a>
 
 <!-- badges: start -->
-
 <!-- [![CRAN/METACRAN Version](https://www.r-pkg.org/badges/version/geouy)](https://CRAN.R-project.org/package=geouy) -->
 <!-- [![CRAN/METACRAN Total downloads](https://cranlogs.r-pkg.org/badges/grand-total/geouy?color=blue)](https://CRAN.R-project.org/package=geouy)  -->
 <!-- [![CRAN/METACRAN downloads per month](https://cranlogs.r-pkg.org/badges/geouy?color=orange)](https://CRAN.R-project.org/package=geouy) -->
@@ -34,12 +20,25 @@ output: github_document
 ![GitHub R package version (subdirectory of monorepo)](https://img.shields.io/github/r-package/v/Natanaelsl/RREORGFdataR)
 ![GitHub License](https://img.shields.io/github/license/Natanaelsl/RREORGFdataR)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Natanaelsl/pagedreport?color=orange)
-
 <!-- badges: end -->
 
-<br />
 
-<!-- --- -->
+
+# Visão geral
+
+**RREORGFdataR** é um pacote R que permite aos usuários acessar facilmente o conjunto de dados do Relatório Resumido da Execução Orçamentária (RREO) e do Relatório de Gestão Fiscal (RGF) utilizando a API do SICONFI (https://apidatalake.tesouro.gov.br/docs/siconfi/). Saiba mais sobre a utilização do 'RREORGFdataR' em https://natanaelsl.com.br/project/.
+
+<!-- <img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180"> -->
+
+- `RREOdata`: <span style="color:red;">(Em construção.)</span>
+
+- `RGFdata`: Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
+
+- `siconfi_list`: Opção padrão `NULL` retorna um `data.frame` contendo os códigos do IBGE e do Siconfi disponíveis para a API, juntamente com as instituições correspondentes. A escolha da opção `options = down` permite o download do arquivo (.pdf) disponibilizado pelo Tesouro Nacional.
+
+
+<!-- <br /> -->
+
 
 ## Instalação
 
@@ -93,23 +92,3 @@ A tabela abaixo apresenta os códigos do IBGE e do Siconfi compatíveis com a AP
 
 
 > **_NOTA:_**  O referido pacote está em fase de construção podendo não ter todas as informações disponíveis para utilização.
-
-<!--
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-library(tabulizer)
-library(dplyr)
-
-Siconfi_table <- "Cod_instituicoes_siconfi.pdf"
-Siconfi_data <- tabulizer::extract_tables(Siconfi_table)
-
-Siconfi_data <- do.call(rbind, lapply(Siconfi_data, as.data.frame)) %>% 
-  stats::setNames(.[1,]) %>% 
-  dplyr::slice(-1)
-
-# knitr::kable(Siconfi_data)
-
-saveRDS(Siconfi_data, file = "Cod_instituicoes_siconfi")
-
-readRDS(file = "Cod_instituicoes_siconfi")
-```
--->

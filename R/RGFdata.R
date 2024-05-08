@@ -40,17 +40,17 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
   # DEFININDO ESTRUTURA PARA UNIÃO
   if(all(nchar(cod.ibge) == 1) & {simplificado} == TRUE ) {
-    cli::cli_alert_danger("A publicação simplificada aplica-se apenas aos municípios com menos de 50 mil habitantes. Não compatível com o `cod.ibge` informado.")
+    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided.")
   }
 
   if(cod.ibge == 1 & (simplificado == FALSE) | is.null(simplificado) ) {
 
     for(z in 1:length(ano)) {
-      cli::cli_progress_step("EXTRAINDO {ano[[z]]}", spinner = TRUE)
+      cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
 
 
       step0 <- " "
-      cli::cli_progress_step("cod. IBGE | {step0}", spinner = TRUE, msg_done = "Finalizado!")
+      cli::cli_progress_step("cod. IBGE | {step0}", spinner = TRUE, msg_done = "Finished!")
       for (j in 1:length(cod.ibge)) {
         Sys.sleep(.1)
         step0 <- glue::glue("{cod.ibge[[j]]}")
@@ -124,7 +124,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~10,
                                              coluna == '<MR-1>'~11,
                                              coluna == '<MR>'~12),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -158,7 +158,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~6,
                                              coluna == '<MR-1>'~7,
                                              coluna == '<MR>'~8),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -192,7 +192,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~2,
                                              coluna == '<MR-1>'~3,
                                              coluna == '<MR>'~4),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -214,11 +214,11 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   if(all(nchar(cod.ibge) == 2) & (simplificado == FALSE) | is.null(simplificado) ) {
 
     for(z in 1:length(ano)) {
-      cli::cli_progress_step("EXTRAINDO {ano[[z]]}", spinner = TRUE)
+      cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
 
 
       step1 <- " "
-      cli::cli_progress_step("cod. IBGE | {step1}", spinner = TRUE, msg_done = "Finalizado!")
+      cli::cli_progress_step("cod. IBGE | {step1}", spinner = TRUE, msg_done = "Finished!")
       for (j in 1:length(cod.ibge)) {
         Sys.sleep(.1)
         step1 <- glue::glue("{cod.ibge[[j]]}")
@@ -293,7 +293,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~10,
                                              coluna == '<MR-1>'~11,
                                              coluna == '<MR>'~12),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -327,7 +327,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~6,
                                              coluna == '<MR-1>'~7,
                                              coluna == '<MR>'~8),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -361,7 +361,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~2,
                                              coluna == '<MR-1>'~3,
                                              coluna == '<MR>'~4),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -380,23 +380,23 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   }
 
   if(all(nchar(cod.ibge) == 2) & {simplificado} == TRUE ) {
-    cli::cli_alert_danger("A publicação simplificada aplica-se apenas aos municípios com menos de 50 mil habitantes. Não compatível com o `cod.ibge` informado.")
+    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided.")
   }
 
   # DEFININDO ESTRUTURA PARA MUNICÍPIOS
   if(all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & {periodo} == 3) {
-    cli::cli_alert_danger("RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Defina `periodo` como 1 ou 2.")
+    cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
 
   }
 
   if((all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & {periodo} != 3) | (all(nchar(cod.ibge) == 7) & {simplificado} == FALSE) ) {
 
     for(z in 1:length(ano)) {
-      cli::cli_progress_step("EXTRAINDO {ano[[z]]}", spinner = TRUE)
+      cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
 
 
       step2 <- " "
-      cli::cli_progress_step("cod. IBGE | {step2}", spinner = TRUE, msg_done = "Finalizado!")
+      cli::cli_progress_step("cod. IBGE | {step2}", spinner = TRUE, msg_done = "Finished!")
       for (j in 1:length(cod.ibge)) {
         Sys.sleep(.1)
         step2 <- glue::glue("{cod.ibge[[j]]}")
@@ -482,7 +482,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~10,
                                              coluna == '<MR-1>'~11,
                                              coluna == '<MR>'~12),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -516,7 +516,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~6,
                                              coluna == '<MR-1>'~7,
                                              coluna == '<MR>'~8),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
@@ -550,7 +550,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
                                              coluna == '<MR-2>'~2,
                                              coluna == '<MR-1>'~3,
                                              coluna == '<MR>'~4),
-                      valor = as.numeric(valor)
+                      valor = as.numeric(rgf_df$valor)
         )
 
       assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)

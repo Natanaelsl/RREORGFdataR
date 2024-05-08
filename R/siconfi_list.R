@@ -24,14 +24,14 @@
 #' # siconfi_list(options == "down")
 siconfi_list <- function(options = NULL){
 
-  # Siconfi_table <- "Cod_instituicoes_siconfi.pdf"
+  # Siconfi_table <- "man/ext_data/Cod_instituicoes_siconfi.pdf"
   # Siconfi_data <- tabulizer::extract_tables(Siconfi_table)
   #
   # Siconfi_data <- do.call(rbind, lapply(Siconfi_data, as.data.frame)) %>%
   #   stats::setNames(.[1,]) %>%
   #   dplyr::slice(-1)
   #
-  # saveRDS(Siconfi_data, file = "Cod_instituicoes_siconfi.rds")
+  # saveRDS(Siconfi_data, file = "man/ext_data/Cod_instituicoes_siconfi.rds")
 
   # https://raw.githubusercontent.com/Natanaelsl/RREORGFdataR/6e9381012ccb1afad53c80447d56f228f751319e/Cod_instituicoes_siconfi.pdf
 
@@ -41,29 +41,37 @@ siconfi_list <- function(options = NULL){
   #
   # }
 
-  if(is.null(options)) {
+  suppressWarnings({
 
-    Siconfi_data <<- readRDS("Cod_instituicoes_siconfi.rds")
+    if(is.null({options})) {
 
-  }
+      Siconfi_data <- readRDS("man/ext_data/Cod_instituicoes_siconfi.rds")
+      # Atribuir o data frame ao ambiente global
+      assign("Siconfi_data", Siconfi_data, envir = globalenv())
 
-  if(options == "down") {
+    }
 
-    url <- "https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf"
+    if({options} == "down") {
 
-    # Nome do arquivo e extensão
-    filename <- "Cod_instituicoes_siconfi.pdf"
+      url <- "https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf"
 
-    # Caminho completo para o arquivo a ser baixado
-    caminho_arquivo <- file.path(utils::choose.dir(), filename)
+      # Nome do arquivo e extensão
+      filename <- "Cod_instituicoes_siconfi.pdf"
 
-    caminho_arquivo <- gsub("/", "\\\\", caminho_arquivo)
+      # Caminho completo para o arquivo a ser baixado
+      caminho_arquivo <- file.path(utils::choose.dir(), filename)
 
-    # Verificar se o arquivo foi baixado com sucesso
-    utils::download.file(url, destfile = caminho_arquivo, mode = "wb")
-    cli::cli_alert_info("Arquivo PDF baixado e salvo com sucesso em: \n")
-    cat(caminho_arquivo)
+      caminho_arquivo <- gsub("/", "\\\\", caminho_arquivo)
 
-  }
+      # Verificar se o arquivo foi baixado com sucesso
+
+      utils::download.file(url, destfile = caminho_arquivo, mode = "wb")
+
+      cli::cli_alert_info("PDF file successfully downloaded and saved to: \n")
+      cat(caminho_arquivo)
+
+    }
+
+  })
 
 }

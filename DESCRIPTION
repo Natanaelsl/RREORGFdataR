@@ -1,15 +1,16 @@
 Package: RREORGFdataR
 Title: Extração intuitiva e fácil do RREO e RGF
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(
+    person("Natanael", "Soares Leite", , "natanaelsoaresleite@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1845-7095")),
+    person("Raphael", "Maciel de Lima", , "raphael@gmail.com", role = c("aut"))
+    )
+Description: **RREORGFdataR** é um pacote R que permite aos usuários acessar facilmente o conjunto de dados do Relatório Resumido da Execução orçamentária (RREO) e do Relatório de Gestão Fiscal (RGF) utilizando a API do SICONFI (<https://apidatalake.tesouro.gov.br/docs/siconfi/>). Saiba mais sobre a utilização do ‘RREORGFdataR’ em <https://natanaelsl.com.br/project/>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-URL: https://github.com/Natanaelsl/RREORGFdataR
+URL: https://natanaelsl.com.br/, https://github.com/Natanaelsl/RREORGFdataR
 BugReports: https://github.com/Natanaelsl/RREORGFdataR/issues
 Imports: 
     magrittr,
