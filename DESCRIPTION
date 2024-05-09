@@ -10,7 +10,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-URL: https://natanaelsl.com.br/, https://github.com/Natanaelsl/RREORGFdataR
+URL: https://natanaelsl.com.br/, https://github.com/Natanaelsl/RREORGFdataR, https://natanaelsl.github.io/RREORGFdataR/
 BugReports: https://github.com/Natanaelsl/RREORGFdataR/issues
 Imports: 
     magrittr,
@@ -21,3 +21,8 @@ Imports:
     jsonlite,
     utils,
     lifecycle
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: 
+    knitr,

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# RREORGFdataR <a href="https://natanaelsl.com.br"><img src="man/figures/Logo_2.png" align="right" height="138" alt="RREORGFdataR_2 website" /></a><a href="https://natanaelsl.com.br"><img src="man/figures/Logo_1.png" align="right" height="138" alt="RREORGFdataR_1 website" /></a>
+# RREORGFdataR <a href="https://natanaelsl.com.br"><img src="man/figures/Logo_2.png" align="right" width="138" alt="RREORGFdataR_2 website" class="logo" style="margin-right: 5px;" /><img src="man/figures/logo.png" align="right" width="138" alt="RREORGFdataR_1 website" class="logo" /></a>
 
 <!-- badges: start -->
 <!-- [![CRAN/METACRAN Version](https://www.r-pkg.org/badges/version/geouy)](https://CRAN.R-project.org/package=geouy) -->
@@ -23,7 +23,7 @@ License](https://img.shields.io/github/license/Natanaelsl/RREORGFdataR)
 stars](https://img.shields.io/github/stars/Natanaelsl/pagedreport?color=orange)
 <!-- badges: end -->
 
-# Visão geral
+## Visão geral
 
 **RREORGFdataR** é um pacote R que permite aos usuários acessar
 facilmente o conjunto de dados do Relatório Resumido da Execução
@@ -106,6 +106,8 @@ de código.
 A tabela abaixo apresenta os códigos do IBGE e do Siconfi compatíveis
 com a API, bem como a respectiva instituição. Disponível em:
 <https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf>
+
+<br />
 
 > ***NOTA:*** O referido pacote está em fase de construção podendo não
 > ter todas as informações disponíveis para utilização.

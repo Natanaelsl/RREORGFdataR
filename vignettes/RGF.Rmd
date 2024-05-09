@@ -1,0 +1,37 @@
+---
+title: "RGF"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{RGF}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(tibble.print_max = 10)
+```
+
+## Introdução
+
+Esta vinheta descreve o uso da função RGFdata( ). Seu objetivo é facilitar a utilização da API do SICONFI, assim, tornando a análise dos dados do Relatório de Gestão Fiscal (RGF) mais simples e rápida.
+
+O Tesouro Nacional disponibilizou a Application Programming Interface (API) de dados abertos para atender à demanda por dados brutos oriundos do Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro – Siconfi. Por meio dessa ferramenta, é possível ao usuário obter desde pequenas frações até grandes volumes de dados de todas as informações inseridas pelos entes subnacionais no Siconfi.
+
+No entanto, muitos usuários das informações ali contidas não apresentam familiaridade com a utilização de API's. Muitas pessoas não acham tal abordagem intuitiva e têm dificuldade em obter a informações que lhe são necessarias. Também parece surpreendentemente difícil lembrar e utilizar os argumentos da API, o que significa que muitas pessoas (inclusive eu!) precisam consultar a documentação todas as vezes.
+
+Assim, nesta vinheta, você aprenderá a principal ideia por trás do RGFdata() e verá como ela pode se usada para resolver uma variedade de desafios.
+
+Para começar, carregaremos alguns pacotes necessários. No código de análise real, imagino que você faria isso com o library(tidyverse), mas não posso fazer isso aqui, pois essa vinheta está incorporada em um pacote.
+
+
+```{r setup, message = FALSE}
+# library(RREORGFdataR)
+```
+
+
+## Exemplo
+

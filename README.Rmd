@@ -5,7 +5,17 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 
-# RREORGFdataR <a href="https://natanaelsl.com.br"><img src="man/figures/Logo_2.png" align="right" height="138" alt="RREORGFdataR_2 website" /></a><a href="https://natanaelsl.com.br"><img src="man/figures/Logo_1.png" align="right" height="138" alt="RREORGFdataR_1 website" /></a>
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+
+# RREORGFdataR <a href="https://natanaelsl.com.br"><img src="man/figures/Logo_2.png" align="right" width="138" alt="RREORGFdataR_2 website" class="logo" style="margin-right: 5px;" /><img src="man/figures/logo.png" align="right" width="138" alt="RREORGFdataR_1 website" class="logo" /></a>
 
 <!-- badges: start -->
 <!-- [![CRAN/METACRAN Version](https://www.r-pkg.org/badges/version/geouy)](https://CRAN.R-project.org/package=geouy) -->
@@ -24,7 +34,7 @@ output: github_document
 
 
 
-# Visão geral
+## Visão geral
 
 **RREORGFdataR** é um pacote R que permite aos usuários acessar facilmente o conjunto de dados do Relatório Resumido da Execução Orçamentária (RREO) e do Relatório de Gestão Fiscal (RGF) utilizando a API do SICONFI (https://apidatalake.tesouro.gov.br/docs/siconfi/). Saiba mais sobre a utilização do 'RREORGFdataR' em https://natanaelsl.com.br/project/.
 
@@ -90,5 +100,6 @@ A sintaxe da função `RREORGFdataR` opera com a mesma lógica independentemente
 
 A tabela abaixo apresenta os códigos do IBGE e do Siconfi compatíveis com a API, bem como a respectiva instituição. Disponível em: https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf
 
+<br />
 
 > **_NOTA:_**  O referido pacote está em fase de construção podendo não ter todas as informações disponíveis para utilização.

@@ -4,7 +4,7 @@
 #' @title RREORGFdataR: Extração intuitiva e fácil dos dados do RREO e RGF utilizando API do SICONFI.
 #'
 #' @description
-#' \if{html}{\figure{Logo_1.png}{options: style='float: right' alt='Logo_1' width='120'}}
+#' \if{html}{\figure{logo.png}{options: style='float: right' alt='Logo_1' width='120'}}
 #' O 'RREORGFdataR' é um pacote R que permite aos usuários acessar facilmente o conjunto de dados do Relatório Resumido da Execução Orçamentária (RREO) e do Relatório de Gestão Fiscal (RGF) utilizando a API do SICONFI (https://apidatalake.tesouro.gov.br/docs/siconfi/). Saiba mais sobre a utilização do 'RREORGFdataR' em \url{https://natanaelsl.com.br/project/}.
 #'
 #' @details
