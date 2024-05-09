@@ -50,12 +50,12 @@ h2, h3, h4, h5, h6 {
 
 .template-home {
   .page-header {
-//    display: flex;
-//    gap: 1rem;
+    display: flex;
+    gap: 1rem;
     align-items: center;
     min-height: 0;
-    margin: 0.8rem 0;
-    padding: 4rem 0;
+    margin: 2rem 0;
+    padding: 2rem 0;
     border-bottom: 1px solid $faint-border;
 
     h1 {margin-top: 0rem}
@@ -66,12 +66,12 @@ h2, h3, h4, h5, h6 {
    }
   }
   img.logo {
-    margin-top: -40px;
+    margin-top: -15px;
     margin-left: 3px;
 
-//    @include media-breakpoint-down(sm) {
-//      width: 100px;
-//    }
+    @include media-breakpoint-down(sm) {
+      width: 100px;
+    }
   }
 }
 
