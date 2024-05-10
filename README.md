@@ -30,7 +30,8 @@ facilmente o conjunto de dados do Relatório Resumido da Execução
 Orçamentária (RREO) e do Relatório de Gestão Fiscal (RGF) utilizando a
 API do SICONFI (<https://apidatalake.tesouro.gov.br/docs/siconfi/>).
 Saiba mais sobre a utilização do ‘RREORGFdataR’ em
-<https://natanaelsl.com.br/project/>.
+<https://natanaelsl.com.br/project/rreorgf_pkg/> ou
+<https://natanaelsl.github.io/RREORGFdataR/>.
 
 <!-- <img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180"> -->
 

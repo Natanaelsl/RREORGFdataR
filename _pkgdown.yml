@@ -3,4 +3,7 @@ lang: pt
 url: https://natanaelsl.github.io/RREORGFdataR/
 template:
   bootstrap: 5
-
+  bslib:
+    primary: "#447099"
+    base_font: {google: {family: "Source Sans Pro", wght: [400, 600], ital: [0, 1]}}
+    code_font: {google: "Source Code Pro"}

@@ -15,7 +15,7 @@ O Tesouro Nacional disponibilizou a Application Programming Interface (API) de d
 \seealso{
 Useful links:
 \itemize{
-\item \url{https://natanaelsl.com.br/project/}
+\item \url{https://natanaelsl.github.io/RREORGFdataR/}
 \item \url{https://github.com/Natanaelsl/RREORGFdataR}
 \item Report bugs at \url{https://github.com/Natanaelsl/RREORGFdataR/issues}
 }
