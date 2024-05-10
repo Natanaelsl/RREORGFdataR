@@ -108,11 +108,13 @@ vezes.</p>
 <p>Assim, nesta vinheta/artigo, você aprenderá a ideia por trás da
 RGFdata() e verá como ela pode ser usada para resolver uma variedade de
 desafios.</p>
-<p>Para começar, carregaremos alguns pacotes necessários.</p>
+<p>Para começar, carregaremos alguns pacotes necessários. Como estou
+dentro do pacote não posso rodar os códigos, mas você pode utilizar as
+rotinas apresentadas abaixo.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://natanaelsl.github.io/RREORGFdataR/">RREORGFdataR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># library(RREORGFdataR)</span></span>
+<span><span class="co"># library(dplyr)</span></span>
+<span><span class="co"># library(ggplot2)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="exemplo">Exemplo<a class="anchor" aria-label="anchor" href="#exemplo"></a>
@@ -123,8 +125,9 @@ por exemplo.</p>
 <p>Dessa forma, podemos extrair do Anexo 1 (3º quadrimestre) de 2017 a
 2023 os valores de Despesa com Pessoal Total para a União
 (Executivo).</p>
+<p>Verifique o exemplo <a href="https://natanaelsl.com.br/project/rreorgf_pkg/" class="external-link">aqui</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># RGFdata(cod.ibge = 1,</span></span>
+<code class="sourceCode R"><span><span class="co"># RREORGFdataR::RGFdata(cod.ibge = 1,</span></span>
 <span><span class="co">#         ano = c(2017:2023),</span></span>
 <span><span class="co">#         poder = 'E',</span></span>
 <span><span class="co">#         periodo = 3,</span></span>
@@ -164,8 +167,7 @@ por exemplo.</p>
 <span><span class="co">#     axis.title.x = element_text(size = 12),</span></span>
 <span><span class="co">#     axis.title.y = element_text(size = 12),</span></span>
 <span><span class="co">#     plot.caption.position = "panel"</span></span>
-<span><span class="co">#   )</span></span>
-<span><span class="co">#   </span></span></code></pre></div>
+<span><span class="co">#   )</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>Nesta página</h2>
     </nav></aside>
