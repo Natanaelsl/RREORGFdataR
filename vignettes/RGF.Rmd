@@ -17,21 +17,71 @@ options(tibble.print_max = 10)
 
 ## Introdução
 
-Esta vinheta descreve o uso da função RGFdata( ). Seu objetivo é facilitar a utilização da API do SICONFI, assim, tornando a análise dos dados do Relatório de Gestão Fiscal (RGF) mais simples e rápida.
+Esta vinheta/artigo descreve o uso da função RGFdata( ). Seu objetivo é facilitar a utilização da API do SICONFI, assim, tornando a análise dos dados do Relatório de Gestão Fiscal (RGF) mais simples e rápida.
 
 O Tesouro Nacional disponibilizou a Application Programming Interface (API) de dados abertos para atender à demanda por dados brutos oriundos do Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro – Siconfi. Por meio dessa ferramenta, é possível ao usuário obter desde pequenas frações até grandes volumes de dados de todas as informações inseridas pelos entes subnacionais no Siconfi.
 
 No entanto, muitos usuários das informações ali contidas não apresentam familiaridade com a utilização de API's. Muitas pessoas não acham tal abordagem intuitiva e têm dificuldade em obter a informações que lhe são necessarias. Também parece surpreendentemente difícil lembrar e utilizar os argumentos da API, o que significa que muitas pessoas (inclusive eu!) precisam consultar a documentação todas as vezes.
 
-Assim, nesta vinheta, você aprenderá a principal ideia por trás do RGFdata() e verá como ela pode se usada para resolver uma variedade de desafios.
+Assim, nesta vinheta/artigo, você aprenderá a ideia por trás da RGFdata() e verá como ela pode ser usada para resolver uma variedade de desafios.
 
-Para começar, carregaremos alguns pacotes necessários. No código de análise real, imagino que você faria isso com o library(tidyverse), mas não posso fazer isso aqui, pois essa vinheta está incorporada em um pacote.
+Para começar, carregaremos alguns pacotes necessários.
 
 
-```{r setup, message = FALSE}
-# library(RREORGFdataR)
+```{r setup, message = FALSE, warning=FALSE}
+library(RREORGFdataR)
+library(dplyr)
+library(ggplot2)
 ```
-
 
 ## Exemplo
 
+A seguir, demonstramos o quão simples é utilizar o pacote para obter um conjunto de dados do RGF e empregá-los na elaboração de um gráfico, por exemplo. 
+
+Dessa forma, podemos extrair do Anexo 1 (3º quadrimestre) de 2017 a 2023 os valores de Despesa com Pessoal Total para a União (Executivo).
+
+```{r, message=FALSE, fig.align='center', out.width="\\linewidth", fig.width=7, fig.height=3}
+RGFdata(cod.ibge = 1,
+        ano = c(2017:2023),
+        poder = 'E',
+        periodo = 3,
+        anexo = 1
+        )
+
+`RGF-Anexo_01` %>% 
+  filter(rotulo == "União",
+         cod_conta == "DespesaComPessoalTotal",
+         coluna == "VALOR") %>% 
+  ggplot2::ggplot(aes(x = exercicio)) +
+  ggplot2::geom_col(aes(y = valor), fill = "#004c4c") +
+  ggplot2::geom_text(
+    aes(y = valor, label = round(valor/1000000000, 0)),
+    fontface = "bold",
+    vjust = 1.4,
+    size = 5,
+    colour = "white"
+  ) +
+  ggplot2::labs(
+    x = "Exercício", y = "",
+    title = 'Despesa com Pessoal Total - Executivo - União (Nominal, em Bilhões)',
+    caption = "\nFonte: Elaborado com RREORGFdataR."
+  ) +
+  ggplot2::scale_x_continuous(n.breaks = 7) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    legend.position = "none",
+    text = element_text(size = 12),
+    axis.line = element_blank(),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(angle = 60, vjust = .95, hjust = 1, size = 10),
+    axis.ticks.y = element_blank(),
+    legend.background = element_blank(),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    plot.caption.position = "panel"
+  )
+  
+
+```

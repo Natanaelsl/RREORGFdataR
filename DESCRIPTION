@@ -23,6 +23,7 @@ Imports:
     lifecycle
 Suggests: 
     knitr,
+    ggplot2,
     rmarkdown
 VignetteBuilder: 
-    knitr,
+    knitr
