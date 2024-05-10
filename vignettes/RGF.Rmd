@@ -41,47 +41,46 @@ A seguir, demonstramos o quão simples é utilizar o pacote para obter um conjun
 Dessa forma, podemos extrair do Anexo 1 (3º quadrimestre) de 2017 a 2023 os valores de Despesa com Pessoal Total para a União (Executivo).
 
 ```{r, message=FALSE, fig.align='center', out.width="\\linewidth", fig.width=7, fig.height=3}
-# RGFdata(cod.ibge = 1,
-#         ano = c(2017:2023),
-#         poder = 'E',
-#         periodo = 3,
-#         anexo = 1
-#         )
-# 
-# `RGF-Anexo_01` %>% 
-#   filter(rotulo == "União",
-#          cod_conta == "DespesaComPessoalTotal",
-#          coluna == "VALOR") %>% 
-#   ggplot2::ggplot(aes(x = exercicio)) +
-#   ggplot2::geom_col(aes(y = valor), fill = "#004c4c") +
-#   ggplot2::geom_text(
-#     aes(y = valor, label = round(valor/1000000000, 0)),
-#     fontface = "bold",
-#     vjust = 1.4,
-#     size = 5,
-#     colour = "white"
-#   ) +
-#   ggplot2::labs(
-#     x = "Exercício", y = "",
-#     title = 'Despesa com Pessoal Total - Executivo - União (Nominal, em Bilhões)',
-#     caption = "\nFonte: Elaborado com RREORGFdataR."
-#   ) +
-#   ggplot2::scale_x_continuous(n.breaks = 7) +
-#   ggplot2::theme_classic() +
-#   ggplot2::theme(
-#     legend.position = "none",
-#     text = element_text(size = 12),
-#     axis.line = element_blank(),
-#     legend.title = element_text(size = 14, face = "bold"),
-#     legend.text = element_text(size = 12),
-#     axis.text.y = element_blank(),
-#     axis.text.x = element_text(angle = 60, vjust = .95, hjust = 1, size = 10),
-#     axis.ticks.y = element_blank(),
-#     legend.background = element_blank(),
-#     axis.title.x = element_text(size = 12),
-#     axis.title.y = element_text(size = 12),
-#     plot.caption.position = "panel"
-#   )
-#   
+RGFdata(cod.ibge = 1,
+        ano = c(2017:2023),
+        poder = 'E',
+        periodo = 3,
+        anexo = 1
+        )
+
+`RGF-Anexo_01` %>%
+  filter(rotulo == "União",
+         cod_conta == "DespesaComPessoalTotal",
+         coluna == "VALOR") %>%
+  ggplot2::ggplot(aes(x = exercicio)) +
+  ggplot2::geom_col(aes(y = valor), fill = "#004c4c") +
+  ggplot2::geom_text(
+    aes(y = valor, label = round(valor/1000000000, 0)),
+    fontface = "bold",
+    vjust = 1.4,
+    size = 5,
+    colour = "white"
+  ) +
+  ggplot2::labs(
+    x = "Exercício", y = "",
+    title = 'Despesa com Pessoal Total - Executivo - União (Nominal, em Bilhões)',
+    caption = "\nFonte: Elaborado com RREORGFdataR."
+  ) +
+  ggplot2::scale_x_continuous(n.breaks = 7) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    legend.position = "none",
+    text = element_text(size = 12),
+    axis.line = element_blank(),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(angle = 60, vjust = .95, hjust = 1, size = 10),
+    axis.ticks.y = element_blank(),
+    legend.background = element_blank(),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    plot.caption.position = "panel"
+  )
 
 ```
