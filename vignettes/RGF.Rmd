@@ -31,7 +31,7 @@ Para começar, carregaremos alguns pacotes necessários. Como estou dentro do pa
 
 
 ```{r setup, message = FALSE, warning=FALSE}
-library(RREORGFdataR)
+# library(RREORGFdataR)
 library(dplyr)
 library(ggplot2)
 ```
@@ -50,12 +50,14 @@ RREORGFdataR::RGFdata(cod.ibge = 1,
         poder = 'E',
         periodo = 3,
         anexo = 1
-        )
+        ) 
 
-`RGF-Anexo_01` %>%
+`RGF-Anexo_01` <- `RGF-Anexo_01` %>%
   filter(rotulo == "União",
          cod_conta == "DespesaComPessoalTotal",
-         coluna == "VALOR") %>%
+         coluna == "VALOR")
+
+`RGF-Anexo_01` %>%
   ggplot2::ggplot(aes(x = exercicio)) +
   ggplot2::geom_col(aes(y = valor), fill = "#004c4c") +
   ggplot2::geom_text(
