@@ -56,7 +56,7 @@ Você pode instalar a versão de desenvolvimento do `RREORGFdataR` no [GitHub](h
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Natanaelsl/RREORGFdataR")
+devtools::install_github("Natanaelsl/RREORGFdataR", build_vignettes = TRUE)
 ```
 
 <!-- --- -->
