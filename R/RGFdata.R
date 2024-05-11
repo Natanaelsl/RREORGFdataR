@@ -81,7 +81,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
           )
 
 
-          rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 30))
+          rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
 
           httr::status_code(rgf)
 
@@ -250,7 +250,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
 
 
-          rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 30))
+          rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
 
           httr::status_code(rgf)
 
@@ -439,7 +439,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
 
 
-          rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 30))
+          rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
 
           httr::status_code(rgf)
 
