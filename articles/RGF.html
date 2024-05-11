@@ -109,8 +109,8 @@ vezes.</p>
 RGFdata() e verá como ela pode ser usada para resolver uma variedade de
 desafios.</p>
 <p>Para começar, carregaremos alguns pacotes necessários. Como estou
-dentro do pacote não posso rodar os códigos, mas você pode utilizar as
-rotinas apresentadas abaixo.</p>
+dentro do pacote não posso rodar os códigos em questão, mas você pode
+utilizar as rotinas apresentadas abaixo.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># library(RREORGFdataR)</span></span>
 <span><span class="co"># library(dplyr)</span></span>
@@ -132,12 +132,14 @@ por exemplo.</p>
 <span><span class="co">#         poder = 'E',</span></span>
 <span><span class="co">#         periodo = 3,</span></span>
 <span><span class="co">#         anexo = 1</span></span>
-<span><span class="co">#         )</span></span>
+<span><span class="co">#         ) </span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># `RGF-Anexo_01` %&gt;%</span></span>
+<span><span class="co"># `RGF-Anexo_01` &lt;- `RGF-Anexo_01` %&gt;%</span></span>
 <span><span class="co">#   filter(rotulo == "União",</span></span>
 <span><span class="co">#          cod_conta == "DespesaComPessoalTotal",</span></span>
-<span><span class="co">#          coluna == "VALOR") %&gt;%</span></span>
+<span><span class="co">#          coluna == "VALOR")</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># `RGF-Anexo_01` %&gt;%</span></span>
 <span><span class="co">#   ggplot2::ggplot(aes(x = exercicio)) +</span></span>
 <span><span class="co">#   ggplot2::geom_col(aes(y = valor), fill = "#004c4c") +</span></span>
 <span><span class="co">#   ggplot2::geom_text(</span></span>
@@ -149,23 +151,24 @@ por exemplo.</p>
 <span><span class="co">#   ) +</span></span>
 <span><span class="co">#   ggplot2::labs(</span></span>
 <span><span class="co">#     x = "Exercício", y = "",</span></span>
-<span><span class="co">#     title = 'Despesa com Pessoal Total - Executivo - União (Nominal, em Bilhões)',</span></span>
+<span><span class="co">#     title = 'Despesa com Pessoal Total - Executivo - União',</span></span>
+<span><span class="co">#     subtitle = '(Nominal, em Bilhões)',</span></span>
 <span><span class="co">#     caption = "\nFonte: Elaborado com RREORGFdataR."</span></span>
 <span><span class="co">#   ) +</span></span>
 <span><span class="co">#   ggplot2::scale_x_continuous(n.breaks = 7) +</span></span>
 <span><span class="co">#   ggplot2::theme_classic() +</span></span>
 <span><span class="co">#   ggplot2::theme(</span></span>
 <span><span class="co">#     legend.position = "none",</span></span>
-<span><span class="co">#     text = element_text(size = 12),</span></span>
+<span><span class="co">#     text = element_text(size = 10),</span></span>
 <span><span class="co">#     axis.line = element_blank(),</span></span>
-<span><span class="co">#     legend.title = element_text(size = 14, face = "bold"),</span></span>
-<span><span class="co">#     legend.text = element_text(size = 12),</span></span>
+<span><span class="co">#     legend.title = element_text(size = 12, face = "bold"),</span></span>
+<span><span class="co">#     legend.text = element_text(size = 10),</span></span>
 <span><span class="co">#     axis.text.y = element_blank(),</span></span>
-<span><span class="co">#     axis.text.x = element_text(angle = 60, vjust = .95, hjust = 1, size = 10),</span></span>
+<span><span class="co">#     axis.text.x = element_text(angle = 60, vjust = .95, hjust = 1, size = 8),</span></span>
 <span><span class="co">#     axis.ticks.y = element_blank(),</span></span>
 <span><span class="co">#     legend.background = element_blank(),</span></span>
-<span><span class="co">#     axis.title.x = element_text(size = 12),</span></span>
-<span><span class="co">#     axis.title.y = element_text(size = 12),</span></span>
+<span><span class="co">#     axis.title.x = element_text(size = 10),</span></span>
+<span><span class="co">#     axis.title.y = element_text(size = 10),</span></span>
 <span><span class="co">#     plot.caption.position = "panel"</span></span>
 <span><span class="co">#   )</span></span></code></pre></div>
 </div>
