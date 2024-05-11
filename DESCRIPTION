@@ -24,6 +24,6 @@ Imports:
 Suggests: 
     knitr,
     ggplot2,
-    rmarkdown
-VignetteBuilder: 
-    knitr,
+    rmarkdown,
+    qpdf
+VignetteBuilder: knitr
