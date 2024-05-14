@@ -45,9 +45,17 @@ siconfi_list <- function(options = NULL){
 
     if(is.null({options})) {
 
-      Siconfi_data <- readRDS("man/ext_data/Cod_instituicoes_siconfi.rds")
+      # Suponha que o arquivo .rds está localizado em inst/extdata dentro do seu pacote
+      data_path <- system.file(package = "RREORGFdataR")
+      data_path <- paste0(data_path,"/R/data/Cod_instituicoes_siconfi.rds")
+
+      # Carregar os dados do arquivo .rds
+      Siconfi_data <- readRDS(data_path)
+      # "R/data/Cod_instituicoes_siconfi.rds"
+
       # Atribuir o data frame ao ambiente global
-      assign("Siconfi_data", Siconfi_data, envir = globalenv())
+      # assign("Siconfi_data", Siconfi_data, envir = globalenv())
+      return(Siconfi_data)
 
     }
 
@@ -63,12 +71,15 @@ siconfi_list <- function(options = NULL){
 
       caminho_arquivo <- gsub("/", "\\\\", caminho_arquivo)
 
-      # Verificar se o arquivo foi baixado com sucesso
 
-      utils::download.file(url, destfile = caminho_arquivo, mode = "wb")
+      if (file.exists(caminho_arquivo)) {
+        utils::download.file(url, destfile = caminho_arquivo, mode = "wb")
+        cli::cli_alert_info("PDF file successfully downloaded and saved to: \n")
+        cat(caminho_arquivo)
 
-      cli::cli_alert_info("PDF file successfully downloaded and saved to: \n")
-      cat(caminho_arquivo)
+      } else {
+        cat("O caminho informado não existe:\n", caminho_arquivo)
+      }
 
     }
 
