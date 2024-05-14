@@ -46,11 +46,11 @@ siconfi_list <- function(options = NULL){
     if(is.null({options})) {
 
       # Suponha que o arquivo .rds está localizado em inst/extdata dentro do seu pacote
-      data_path <- system.file(package = "RREORGFdataR")
-      data_path <- paste0(data_path,"/R/data/Cod_instituicoes_siconfi.rds")
+      # data_path <- system.file("R/data", "Cod_instituicoes_siconfi.rds", package = "RREORGFdataR")
+
 
       # Carregar os dados do arquivo .rds
-      Siconfi_data <- readRDS(data_path)
+      Siconfi_data <- readRDS("R/data/Cod_instituicoes_siconfi.rds")
       # "R/data/Cod_instituicoes_siconfi.rds"
 
       # Atribuir o data frame ao ambiente global
