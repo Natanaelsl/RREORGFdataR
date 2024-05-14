@@ -78,7 +78,7 @@ siconfi_list <- function(options = NULL){
         cat(caminho_arquivo)
 
       } else {
-        cat("O caminho informado não existe:\n", caminho_arquivo)
+        cat("The path provided does not exist:\n", caminho_arquivo)
       }
 
     }
