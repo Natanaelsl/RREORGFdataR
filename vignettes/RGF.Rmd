@@ -45,19 +45,17 @@ Dessa forma, podemos extrair do Anexo 1 (3º quadrimestre) de 2017 a 2023 os val
 Verifique o exemplo [aqui](https://natanaelsl.com.br/project/rreorgf_pkg/).
 
 ```{r, message=FALSE, fig.align='center', out.width="\\linewidth", fig.width=4, fig.height=3}
-# RREORGFdataR::RGFdata(cod.ibge = 1,
+# df <- RREORGFdataR::RGFdata(cod.ibge = 1,
 #         ano = c(2017:2023),
 #         poder = 'E',
 #         periodo = 3,
 #         anexo = 1
 #         ) 
 # 
-# `RGF-Anexo_01` <- `RGF-Anexo_01` %>%
+# df %>%
 #   filter(rotulo == "União",
 #          cod_conta == "DespesaComPessoalTotal",
-#          coluna == "VALOR")
-# 
-# `RGF-Anexo_01` %>%
+#          coluna == "VALOR") %>%
 #   ggplot2::ggplot(aes(x = exercicio)) +
 #   ggplot2::geom_col(aes(y = valor), fill = "#004c4c") +
 #   ggplot2::geom_text(
