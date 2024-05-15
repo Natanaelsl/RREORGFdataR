@@ -46,7 +46,7 @@ Verifique o exemplo [aqui](https://natanaelsl.com.br/project/rreorgf_pkg/).
 
 ```{r, message=FALSE, fig.align='center', out.width="\\linewidth", fig.width=4, fig.height=3}
 RREORGFdataR::RGFdata(cod.ibge = 1,
-        ano = c(2017:2023),
+        ano = c(2023),
         poder = 'E',
         periodo = 3,
         anexo = 1
