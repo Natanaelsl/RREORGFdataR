@@ -11,13 +11,14 @@
 #' @export
 #' @examples
 #' # install.packages("devtools")
-#' # devtools::install_github("Natanaelsl/RREORGFdataR")
+#' devtools::install_github("Natanaelsl/RREORGFdataR")
 #'
 #' # Carregando o pacote
-#' # library(RREORGFdataR)
+#'  library(RREORGFdataR)
 #'
 #' # Reportando `data.frame` com os códigos disponibilizados pelo Tesouro Nacional
-#' # siconfi_list()
+#' siconfi_list() %>%
+#' utils::tail(10)
 #'
 #' # Baixando arquivo (.pdf) disponibilizado pelo Tesouro Nacional
 #' # apresentando lista com os códigos

@@ -17,19 +17,19 @@
 #' @export
 #' @examples
 #' # install.packages("devtools")
-#' # devtools::install_github("Natanaelsl/RREORGFdataR")
+#' devtools::install_github("Natanaelsl/RREORGFdataR")
 #'
 #' # Carregando o pacote
-#' # library(RREORGFdataR)
+#' library(RREORGFdataR)
 #'
 #' # Extraindo dados do anexo 1 para o 3º quadrimestre
 #' # do RGF de 2020 até 2023 do Estado de Goiás para todos os poderes.
-#' # RGFdata(cod.ibge = 52,
-#' #         ano = c(2020:2023),
-#' #         poder = c('E','L','J','D','M'),
-#' #         periodo = 3,
-#' #         anexo = 1,
-#' #         simplificado = FALSE)
+#'  RGFdata(cod.ibge = 52,
+#'         ano = c(2020:2023),
+#'         poder = c('E','L','J','D','M'),
+#'         periodo = 3,
+#'         anexo = 1,
+#'         simplificado = FALSE)
 RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, anexo = NULL, simplificado = FALSE){
 
 

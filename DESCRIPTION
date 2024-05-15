@@ -26,5 +26,8 @@ Suggests:
     ggplot2,
     rmarkdown,
     vctrs,
-    qpdf
+    qpdf,
+    devtools
+Depends:
+  R (>= 3.5)
 VignetteBuilder: knitr
