@@ -19,7 +19,7 @@ Retorna informações sobre os códigos do IBGE e do Siconfi e as respectivas in
 devtools::install_github("Natanaelsl/RREORGFdataR")
 
 # Carregando o pacote
- library(RREORGFdataR)
+library(RREORGFdataR)
 
 # Reportando `data.frame` com os códigos disponibilizados pelo Tesouro Nacional
 siconfi_list() \%>\%
