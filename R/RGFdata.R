@@ -356,12 +356,12 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   }
 
   # DEFININDO ESTRUTURA PARA MUNICÍPIOS
-  if(all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & {periodo} == 3) {
+  if(all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & (3 %in% periodo)) {
     cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
 
   }
 
-  if((all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & {periodo} != 3) | (all(nchar(cod.ibge) == 7) & {simplificado} == FALSE) ) {
+  if((all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & !(3 %in% periodo)) | (all(nchar(cod.ibge) == 7) & {simplificado} == FALSE) ) {
 
     for(z in 1:length(ano)) {
       cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
