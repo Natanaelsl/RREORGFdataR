@@ -104,7 +104,7 @@
 <p>Você pode instalar a versão de desenvolvimento do <code>RREORGFdataR</code> no <a href="https://github.com/" class="external-link">GitHub</a> com:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Natanaelsl/RREORGFdataR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Natanaelsl/RREORGFdataR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <!-- --- -->
 </div>
 <div class="section level2">
@@ -120,12 +120,12 @@
 <span></span>
 <span><span class="co">## Extraindo dados do anexo 1 para o 3º quadrimestre do RGF de 2020 até 2023</span></span>
 <span><span class="co">## do Estado de Goiás para todos os poderes.</span></span>
-<span><span class="co"># RGFdata(cod.ibge = 52,</span></span>
-<span><span class="co">#         ano = c(2020:2023),</span></span>
-<span><span class="co">#         poder = c('E','L','J','D','M'),</span></span>
-<span><span class="co">#         periodo = 3,</span></span>
-<span><span class="co">#         anexo = 1,</span></span>
-<span><span class="co">#         simplificado = FALSE)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/RGFdata.html">RGFdata</a></span><span class="op">(</span>cod.ibge <span class="op">=</span> <span class="fl">52</span>,</span>
+<span>         ano <span class="op">=</span> <span class="fl">2023</span>,</span>
+<span>         poder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'E'</span>,<span class="st">'L'</span>,<span class="st">'J'</span>,<span class="st">'D'</span>,<span class="st">'M'</span><span class="op">)</span>,</span>
+<span>         periodo <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>         anexo <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>         simplificado <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <!-- --- -->
 </div>
 <div class="section level2">

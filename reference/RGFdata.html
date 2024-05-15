@@ -97,20 +97,34 @@ Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira 
     <div class="section level2">
     <h2 id="ref-examples">Exemplos<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># install.packages("devtools")</span></span></span>
-<span class="r-in"><span><span class="co"># devtools::install_github("Natanaelsl/RREORGFdataR")</span></span></span>
+<span class="r-in"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Natanaelsl/RREORGFdataR"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT in .Renviron (or elsewhere) if you want to use the more secure git credential store instead.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading GitHub repo Natanaelsl/RREORGFdataR@HEAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD build</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for file ‘/tmp/RtmpIE9ffZ/remotes18dc2ea5466/Natanaelsl-RREORGFdataR-0a30dc4/DESCRIPTION’ ... OK</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * preparing ‘RREORGFdataR’:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking DESCRIPTION meta-information ... OK</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for LF line-endings in source and make files and shell scripts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for empty or unneeded directories</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * building ‘RREORGFdataR_0.0.0.9000.tar.gz’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Installing package into ‘/home/runner/work/_temp/Library’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (as ‘lib’ is unspecified)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Carregando o pacote</span></span></span>
-<span class="r-in"><span><span class="co"># library(RREORGFdataR)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://natanaelsl.github.io/RREORGFdataR/">RREORGFdataR</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extraindo dados do anexo 1 para o 3º quadrimestre</span></span></span>
 <span class="r-in"><span><span class="co"># do RGF de 2020 até 2023 do Estado de Goiás para todos os poderes.</span></span></span>
-<span class="r-in"><span><span class="co"># RGFdata(cod.ibge = 52,</span></span></span>
-<span class="r-in"><span><span class="co">#         ano = c(2020:2023),</span></span></span>
-<span class="r-in"><span><span class="co">#         poder = c('E','L','J','D','M'),</span></span></span>
-<span class="r-in"><span><span class="co">#         periodo = 3,</span></span></span>
-<span class="r-in"><span><span class="co">#         anexo = 1,</span></span></span>
-<span class="r-in"><span><span class="co">#         simplificado = FALSE)</span></span></span>
-<span class="r-in"></span>
+<span class="r-in"><span> <span class="fu">RGFdata</span><span class="op">(</span>cod.ibge <span class="op">=</span> <span class="fl">52</span>,</span></span>
+<span class="r-in"><span>        ano <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">:</span><span class="fl">2023</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        poder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'E'</span>,<span class="st">'L'</span>,<span class="st">'J'</span>,<span class="st">'D'</span>,<span class="st">'M'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        periodo <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>        anexo <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>        simplificado <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>internal error 1 in R_decompress1 with libdeflate</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> lazy-load database '/home/runner/work/_temp/Library/RREORGFdataR/R/RREORGFdataR.rdb' is corrupt</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>Nesta página</h2>
