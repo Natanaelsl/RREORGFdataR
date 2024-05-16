@@ -361,70 +361,73 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
   }
 
-  if((all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & !(3 %in% periodo)) | (all(nchar(cod.ibge) == 7) & ({simplificado} == FALSE | is.null(simplificado) )) ) {
+  if((all(nchar(cod.ibge) == 7))) {
+    if(({simplificado} == TRUE & !(3 %in% periodo)) | {simplificado} == FALSE | is.null(simplificado) ) {
 
-    for(z in 1:length(ano)) {
-      cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
-
-
-      step2 <- " "
-      cli::cli_progress_step("cod. IBGE | {step2}", spinner = TRUE, msg_done = "Finished!")
-      for (j in 1:length(cod.ibge)) {
-        Sys.sleep(.1)
-        step2 <- glue::glue("{cod.ibge[[j]]}")
-        cli::cli_progress_update(set = j)
+      for(z in 1:length(ano)) {
+        cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
 
 
-        for (i in 1:length(poder)) {
+        step2 <- " "
+        cli::cli_progress_step("cod. IBGE | {step2}", spinner = TRUE, msg_done = "Finished!")
+        for (j in 1:length(cod.ibge)) {
+          Sys.sleep(.1)
+          step2 <- glue::glue("{cod.ibge[[j]]}")
+          cli::cli_progress_update(set = j)
 
 
-          for (w in 1:length(periodo)) {
+          for (i in 1:length(poder)) {
 
-            exercicio <- ano[[z]]
-            # if(({simplificado} == TRUE & !(3 %in% periodo)) | {simplificado} == FALSE | is.null(simplificado)) {
+
+            for (w in 1:length(periodo)) {
+
+              exercicio <- ano[[z]]
+              # if(({simplificado} == TRUE & !(3 %in% periodo)) | {simplificado} == FALSE | is.null(simplificado)) {
               tempo <- as.character(periodo[[w]])
-            # }
+              # }
 
-            if({simplificado} == TRUE) {
-              tipo_relatorio <- "RGF+Simplificado"
-              periodicidade = "S"
-            } else {
-              tipo_relatorio <- "RGF"
-              periodicidade = "Q"
+              if({simplificado} == TRUE) {
+                tipo_relatorio <- "RGF+Simplificado"
+                periodicidade = "S"
+              } else {
+                tipo_relatorio <- "RGF"
+                periodicidade = "Q"
+              }
+              num_anexo <- glue::glue("RGF-Anexo%200",{{anexo}})
+              esfera <- "M"
+              cod_poder <- poder[[i]]
+              ente <- cod.ibge[[j]]
+
+              # montar a chamada à API
+              chamada_api_rgf <- paste(base_url_rgf,
+                                       "an_exercicio=", exercicio, "&",
+                                       "in_periodicidade=", periodicidade,"&",
+                                       "nr_periodo=", tempo, "&",
+                                       "co_tipo_demonstrativo=", tipo_relatorio, "&",
+                                       "no_anexo=", num_anexo, "&",
+                                       "co_esfera=", esfera , "&",
+                                       "co_poder=", cod_poder, "&",
+                                       "id_ente=", ente, sep = "")
+
+
+
+              rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
+
+              httr::status_code(rgf)
+
+              rgf_txt <- httr::content(rgf, as="text", encoding="UTF-8")
+
+              rgf_json <- jsonlite::fromJSON(rgf_txt, flatten = FALSE)
+
+              rgf_df1 <- as.data.frame(rgf_json[["items"]])
+
+              rgf_df <-  rbind(rgf_df, rgf_df1)
+
             }
-            num_anexo <- glue::glue("RGF-Anexo%200",{{anexo}})
-            esfera <- "M"
-            cod_poder <- poder[[i]]
-            ente <- cod.ibge[[j]]
-
-            # montar a chamada à API
-            chamada_api_rgf <- paste(base_url_rgf,
-                                     "an_exercicio=", exercicio, "&",
-                                     "in_periodicidade=", periodicidade,"&",
-                                     "nr_periodo=", tempo, "&",
-                                     "co_tipo_demonstrativo=", tipo_relatorio, "&",
-                                     "no_anexo=", num_anexo, "&",
-                                     "co_esfera=", esfera , "&",
-                                     "co_poder=", cod_poder, "&",
-                                     "id_ente=", ente, sep = "")
-
-
-
-            rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
-
-            httr::status_code(rgf)
-
-            rgf_txt <- httr::content(rgf, as="text", encoding="UTF-8")
-
-            rgf_json <- jsonlite::fromJSON(rgf_txt, flatten = FALSE)
-
-            rgf_df1 <- as.data.frame(rgf_json[["items"]])
-
-            rgf_df <-  rbind(rgf_df, rgf_df1)
-
           }
         }
       }
+
     }
 
     if({{num_anexo}} == "RGF-Anexo%2001") {
