@@ -358,7 +358,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   # DEFININDO ESTRUTURA PARA MUNICÍPIOS
   if(all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & (3 %in% periodo)) {
     cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
-
+    stop("Too many iterations")
   }
 
   if((all(nchar(cod.ibge) == 7)) & ((isTRUE(simplificado) & !(3 %in% periodo)) | is.null(simplificado) | simplificado == FALSE) ) {
