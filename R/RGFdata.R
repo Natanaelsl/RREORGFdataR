@@ -381,7 +381,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
           for (w in 1:length(periodo)) {
 
             exercicio <- ano[[z]]
-            if({simplificado} == TRUE & ({periodo} == 1 | {periodo} == 2)) {
+            if({simplificado} == TRUE & !(3 %in% periodo)) {
               tempo <- as.character(periodo[[w]])
             }
 
