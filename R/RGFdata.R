@@ -361,7 +361,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
   }
 
-  if((all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & !(3 %in% periodo)) | (all(nchar(cod.ibge) == 7) & {simplificado} == FALSE) ) {
+  if((all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & !(3 %in% periodo)) | (all(nchar(cod.ibge) == 7) & ({simplificado} == FALSE | is.null(simplificado) )) ) {
 
     for(z in 1:length(ano)) {
       cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
@@ -381,13 +381,9 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
           for (w in 1:length(periodo)) {
 
             exercicio <- ano[[z]]
-            if({simplificado} == TRUE & !(3 %in% periodo)) {
+            # if(({simplificado} == TRUE & !(3 %in% periodo)) | {simplificado} == FALSE | is.null(simplificado)) {
               tempo <- as.character(periodo[[w]])
-            }
-
-            if ({simplificado} == FALSE | is.null(simplificado)) {
-              tempo <- as.character(periodo[[w]])
-            }
+            # }
 
             if({simplificado} == TRUE) {
               tipo_relatorio <- "RGF+Simplificado"
