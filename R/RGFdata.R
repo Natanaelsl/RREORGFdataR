@@ -351,12 +351,12 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
   }
 
-  if(all(nchar(cod.ibge) == 2) & {simplificado} == TRUE ) {
+  if(all(nchar(cod.ibge) == 2) & isTRUE(simplificado) ) {
     cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided.")
   }
 
   # DEFININDO ESTRUTURA PARA MUNICÍPIOS
-  if(all(nchar(cod.ibge) == 7) & {simplificado} == TRUE & (3 %in% periodo)) {
+  if(all(nchar(cod.ibge) == 7) & isTRUE(simplificado) & (3 %in% periodo)) {
     cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
     stop("Too many iterations")
   }
