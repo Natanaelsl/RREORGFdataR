@@ -64,7 +64,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
             exercicio <- ano[[z]]
             periodicidade = "Q"
-            tempo <- as.character(periodo[[w]])
+            tempo <- periodo[[w]]
             tipo_relatorio <- "RGF"
             num_anexo <- glue::glue("RGF-Anexo%200",{{anexo}})
             esfera <- "U"
@@ -218,7 +218,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
             exercicio <- ano[[z]]
             periodicidade = "Q"
-            tempo <- as.character(periodo[[w]])
+            tempo <- periodo[[w]]
             tipo_relatorio <- "RGF"
             num_anexo <- glue::glue("RGF-Anexo%200",{{anexo}})
             esfera <- "E"
@@ -383,7 +383,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
               exercicio <- ano[[z]]
               # if(({simplificado} == TRUE & !(3 %in% periodo)) | {simplificado} == FALSE | is.null(simplificado)) {
-              tempo <- as.character(periodo[[w]])
+              tempo <- periodo[[w]]
               # }
 
               if({simplificado} == TRUE) {
