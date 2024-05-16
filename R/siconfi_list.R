@@ -75,8 +75,8 @@ siconfi_list <- function(options = NULL){
 
       if (file.exists(caminho_arquivo)) {
         utils::download.file(url, destfile = caminho_arquivo, mode = "wb")
-        cli::cli_alert_info("PDF file successfully downloaded and saved to: \n ")
-        cli::cli_text("{.file {caminho_arquivo}}")
+        cli::cli_alert_info("PDF file successfully downloaded and saved to: \n {.path {caminho_arquivo}}")
+
 
       } else {
         cli::cli_alert_danger("The path provided does not exist:\n {.path {caminho_arquivo}}")
