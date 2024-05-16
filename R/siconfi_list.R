@@ -68,14 +68,17 @@ siconfi_list <- function(options = NULL){
       filename <- "Cod_instituicoes_siconfi.pdf"
 
       # Caminho completo para o arquivo a ser baixado
-      caminho_arquivo <- file.path(utils::choose.dir(), filename)
+      path <- utils::choose.dir()
+      caminho_arquivo0 <- file.path(path, filename)
 
-      caminho_arquivo <- gsub("/", "\\\\", caminho_arquivo)
+      caminho_arquivo <- gsub("/", "\\\\", caminho_arquivo0)
 
 
-      if (file.exists(caminho_arquivo)) {
+      if (file.exists(path)) {
         utils::download.file(url, destfile = caminho_arquivo, mode = "wb")
         cli::cli_alert_info("PDF file successfully downloaded and saved to: \n {.path {caminho_arquivo}}")
+
+
       } else {
         cli::cli_alert_danger("The path provided does not exist:\n {.path {caminho_arquivo}}")
       }
