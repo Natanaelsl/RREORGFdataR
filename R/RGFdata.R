@@ -362,7 +362,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   }
 
   if((all(nchar(cod.ibge) == 7))) {
-    if(({simplificado} == TRUE & !(3 %in% periodo)) | {simplificado} == FALSE | is.null(simplificado) ) {
+    if((isTRUE(simplificado) & !(3 %in% periodo)) | is.null(simplificado) | simplificado == FALSE) {
 
       for(z in 1:length(ano)) {
         cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
@@ -430,7 +430,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
     }
 
-    if({{num_anexo}} == "RGF-Anexo%2001") {
+    if({{num_anexo}} == "RGF-Anexo%2001" & simplificado != TRUE) {
       rgf_df0 <- rgf_df %>%
         dplyr::mutate(mes_nome = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~ glue::glue('jan/{exercicio}'),
                                                   periodo == 2 & coluna == '<MR-11>'~ glue::glue('set/{exercicio - 1}'),
