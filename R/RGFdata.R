@@ -40,11 +40,11 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
   # MENSAGENS DE ERRO
   if(all(nchar(cod.ibge) == 1) & {simplificado} == TRUE ) {
-    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided.")
+    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list(options = 'down')} to see list of municipalities.")
   }
 
   if(all(nchar(cod.ibge) == 2) & isTRUE(simplificado) ) {
-    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided.")
+    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list(options = 'down')} to see list of municipalities.")
   }
 
   if(all(nchar(cod.ibge) == 7) & isTRUE(simplificado) & (3 %in% periodo)) {
@@ -515,7 +515,11 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
       rgf_df0 <- rgf_df
       # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
       # rm(rgf_df0)
-      return(rgf_df0)
+      if(isTRUE(simplificado) & ncol(rgf_df0) == 0) {
+        cli::cli_alert_warning("Check the parameters! `simplified` not compatible with the `cod.ibge` provided. Change `Simplified` to FALSE \n Run {.run RREORGFdataR::siconfi_list(options = 'down')} to see list of municipalities.")
+      } else {
+        return(rgf_df0)
+      }
 
     }
 
