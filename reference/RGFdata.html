@@ -59,37 +59,37 @@ Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira 
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">RGFdata</span><span class="op">(</span></span>
 <span>  cod.ibge <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ano <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  poder <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  periodo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  anexo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  simplificado <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  year <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  power <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  period <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  annex <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  simplified <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="argumentos">Argumentos<a class="anchor" aria-label="anchor" href="#argumentos"></a></h2>
     <dl><dt>cod.ibge</dt>
-<dd><p>Código IBGE do Ente. se <code>simplificado = TRUE</code>, então selecione municípios.</p></dd>
+<dd><p>Código IBGE do Ente. se <code>simplified = TRUE</code>, então selecione municípios.</p></dd>
 
 
-<dt>ano</dt>
+<dt>year</dt>
 <dd><p>Exercício do relatório</p></dd>
 
 
-<dt>poder</dt>
+<dt>power</dt>
 <dd><p>Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública</p></dd>
 
 
-<dt>periodo</dt>
-<dd><p>Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se <code>simplificado = TRUE</code>.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.</p></dd>
+<dt>period</dt>
+<dd><p>Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se <code>simplified = TRUE</code>.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.</p></dd>
 
 
-<dt>anexo</dt>
+<dt>annex</dt>
 <dd><p>Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.</p></dd>
 
 
-<dt>simplificado</dt>
+<dt>simplified</dt>
 <dd><p>Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se <code>TRUE</code> a periodicidade semestral será automaticamente selecionada.</p></dd>
 
 </dl></div>
@@ -102,7 +102,7 @@ Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira 
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading GitHub repo Natanaelsl/RREORGFdataR@HEAD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD build</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for file ‘/tmp/RtmpdSNVjC/remotes16ba4379f619/Natanaelsl-RREORGFdataR-b3fb7a7/DESCRIPTION’ ... OK</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for file ‘/tmp/RtmpdF3aIB/remotes16df29d3550a/Natanaelsl-RREORGFdataR-644a9d9/DESCRIPTION’ ... OK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * preparing ‘RREORGFdataR’:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * checking DESCRIPTION meta-information ... OK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * checking for LF line-endings in source and make files and shell scripts</span>
@@ -118,11 +118,11 @@ Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira 
 <span class="r-in"><span><span class="co"># Extraindo dados do anexo 1 para o 3º quadrimestre</span></span></span>
 <span class="r-in"><span><span class="co"># do RGF de 2020 até 2023 do Estado de Goiás para todos os poderes.</span></span></span>
 <span class="r-in"><span><span class="fu">RGFdata</span><span class="op">(</span>cod.ibge <span class="op">=</span> <span class="fl">52</span>,</span></span>
-<span class="r-in"><span>        ano <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">:</span><span class="fl">2023</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        poder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'E'</span>,<span class="st">'L'</span>,<span class="st">'J'</span>,<span class="st">'D'</span>,<span class="st">'M'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        periodo <span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>        anexo <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>        simplificado <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">:</span><span class="fl">2023</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        power <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'E'</span>,<span class="st">'L'</span>,<span class="st">'J'</span>,<span class="st">'D'</span>,<span class="st">'M'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        period <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>        annex <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>        simplified <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>internal error 1 in R_decompress1 with libdeflate</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> lazy-load database '/home/runner/work/_temp/Library/RREORGFdataR/R/RREORGFdataR.rdb' is corrupt</span>
 </code></pre></div>
