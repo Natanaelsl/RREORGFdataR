@@ -6,25 +6,25 @@
 \usage{
 RGFdata(
   cod.ibge = NULL,
-  ano = NULL,
-  poder = NULL,
-  periodo = NULL,
-  anexo = NULL,
-  simplificado = FALSE
+  year = NULL,
+  power = NULL,
+  period = NULL,
+  annex = NULL,
+  simplified = FALSE
 )
 }
 \arguments{
-\item{cod.ibge}{Código IBGE do Ente. se \code{simplificado = TRUE}, então selecione municípios.}
+\item{cod.ibge}{Código IBGE do Ente. se \code{simplified = TRUE}, então selecione municípios.}
 
-\item{ano}{Exercício do relatório}
+\item{year}{Exercício do relatório}
 
-\item{poder}{Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública}
+\item{power}{Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública}
 
-\item{periodo}{Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se \code{simplificado = TRUE}.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.}
+\item{period}{Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se \code{simplified = TRUE}.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.}
 
-\item{anexo}{Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.}
+\item{annex}{Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.}
 
-\item{simplificado}{Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se \code{TRUE} a periodicidade semestral será automaticamente selecionada.}
+\item{simplified}{Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se \code{TRUE} a periodicidade semestral será automaticamente selecionada.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -41,9 +41,9 @@ library(RREORGFdataR)
 # Extraindo dados do anexo 1 para o 3º quadrimestre
 # do RGF de 2020 até 2023 do Estado de Goiás para todos os poderes.
 RGFdata(cod.ibge = 52,
-        ano = c(2020:2023),
-        poder = c('E','L','J','D','M'),
-        periodo = 3,
-        anexo = 1,
-        simplificado = FALSE)
+        year = c(2020:2023),
+        power = c('E','L','J','D','M'),
+        period = 3,
+        annex = 1,
+        simplified = FALSE)
 }

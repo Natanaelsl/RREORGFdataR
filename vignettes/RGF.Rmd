@@ -46,11 +46,11 @@ Verifique o exemplo [aqui](https://natanaelsl.com.br/project/rreorgf_pkg/).
 
 ```{r, message=FALSE, fig.align='center', out.width="\\linewidth", fig.width=4, fig.height=3}
 # df <- RREORGFdataR::RGFdata(cod.ibge = 1,
-#         ano = c(2017:2023),
-#         poder = 'E',
-#         periodo = 3,
-#         anexo = 1
-#         ) 
+#                             year = c(2017:2023),
+#                             power = 'E',
+#                             period = 3,
+#                             annex = 1
+#                             ) 
 # 
 # df %>%
 #   filter(rotulo == "União",

@@ -75,11 +75,11 @@ library(RREORGFdataR)
 ## Extraindo dados do anexo 1 para o 3º quadrimestre do RGF de 2020 até 2023
 ## do Estado de Goiás para todos os poderes.
 RGFdata(cod.ibge = 52,
-         ano = 2023,
-         poder = c('E','L','J','D','M'),
-         periodo = 3,
-         anexo = 1,
-         simplificado = FALSE)
+        year = 2023,
+        power = c('E','L','J','D','M'),
+        period = 3,
+        annex = 1,
+        simplified = FALSE)
 ```
 
 <!-- --- -->

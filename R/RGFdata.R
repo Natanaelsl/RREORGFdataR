@@ -6,12 +6,12 @@
 #'
 #' Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
 #'
-#' @param cod.ibge Código IBGE do Ente. se `simplificado = TRUE`, então selecione municípios.
-#' @param ano Exercício do relatório
-#' @param poder Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública
-#' @param periodo Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se `simplificado = TRUE`.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.
-#' @param anexo Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.
-#' @param simplificado Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se `TRUE` a periodicidade semestral será automaticamente selecionada.
+#' @param cod.ibge Código IBGE do Ente. se `simplified = TRUE`, então selecione municípios.
+#' @param year Exercício do relatório
+#' @param power Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública
+#' @param period Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se `simplified = TRUE`.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.
+#' @param annex Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.
+#' @param simplified Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se `TRUE` a periodicidade semestral será automaticamente selecionada.
 #'
 #'
 #' @export
@@ -25,12 +25,12 @@
 #' # Extraindo dados do anexo 1 para o 3º quadrimestre
 #' # do RGF de 2020 até 2023 do Estado de Goiás para todos os poderes.
 #' RGFdata(cod.ibge = 52,
-#'         ano = c(2020:2023),
-#'         poder = c('E','L','J','D','M'),
-#'         periodo = 3,
-#'         anexo = 1,
-#'         simplificado = FALSE)
-RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, anexo = NULL, simplificado = FALSE){
+#'         year = c(2020:2023),
+#'         power = c('E','L','J','D','M'),
+#'         period = 3,
+#'         annex = 1,
+#'         simplified = FALSE)
+RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, annex = NULL, simplified = FALSE){
 
 
   base_url_rgf <- "https://apidatalake.tesouro.gov.br/ords/siconfi/tt/rgf?"
@@ -39,23 +39,23 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   rgf_df <- data.frame(stringsAsFactors = FALSE)
 
   # MENSAGENS DE ERRO
-  if(all(nchar(cod.ibge) == 1) & {simplificado} == TRUE ) {
+  if(all(nchar(cod.ibge) == 1) & {simplified} == TRUE ) {
     cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
   }
 
-  if(all(nchar(cod.ibge) == 2) & isTRUE(simplificado) ) {
+  if(all(nchar(cod.ibge) == 2) & isTRUE(simplified) ) {
     cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
   }
 
-  if(all(nchar(cod.ibge) == 7) & isTRUE(simplificado) & (3 %in% periodo)) {
+  if(all(nchar(cod.ibge) == 7) & isTRUE(simplified) & (3 %in% period)) {
     cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
   }
 
   # DEFININDO ESTRUTURA PARA UNIÃO
-  if(all(nchar(cod.ibge) == 1) & (simplificado == FALSE) | is.null(simplificado) ) {
+  if(all(nchar(cod.ibge) == 1) & (simplified == FALSE) | is.null(simplified) ) {
 
-    for(z in 1:length(ano)) {
-      cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
+    for(z in 1:length(year)) {
+      cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
 
 
       step0 <- " "
@@ -66,18 +66,18 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
         cli::cli_progress_update(set = j)
 
 
-        for (i in 1:length(poder)) {
+        for (i in 1:length(power)) {
 
 
-          for (w in 1:length(periodo)) {
+          for (w in 1:length(period)) {
 
-            exercicio <- ano[[z]]
+            exercicio <- year[[z]]
             periodicidade = "Q"
-            tempo <- periodo[[w]]
+            tempo <- period[[w]]
             tipo_relatorio <- "RGF"
-            num_anexo <- glue::glue("RGF-Anexo%200",{{anexo}})
+            num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
             esfera <- "U"
-            cod_poder <- poder[[i]]
+            cod_poder <- power[[i]]
             ente <- cod.ibge[[j]]
 
             # montar a chamada à API
@@ -206,10 +206,10 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   }
 
   # DEFININDO ESTRUTURA PARA ESTADOS
-  if(all(nchar(cod.ibge) == 2) & (simplificado == FALSE) | is.null(simplificado) ) {
+  if(all(nchar(cod.ibge) == 2) & (simplified == FALSE) | is.null(simplified) ) {
 
-    for(z in 1:length(ano)) {
-      cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
+    for(z in 1:length(year)) {
+      cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
 
 
       step1 <- " "
@@ -220,18 +220,18 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
         cli::cli_progress_update(set = j)
 
 
-        for (i in 1:length(poder)) {
+        for (i in 1:length(power)) {
 
 
-          for (w in 1:length(periodo)) {
+          for (w in 1:length(period)) {
 
-            exercicio <- ano[[z]]
+            exercicio <- year[[z]]
             periodicidade = "Q"
-            tempo <- periodo[[w]]
+            tempo <- period[[w]]
             tipo_relatorio <- "RGF"
-            num_anexo <- glue::glue("RGF-Anexo%200",{{anexo}})
+            num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
             esfera <- "E"
-            cod_poder <- poder[[i]]
+            cod_poder <- power[[i]]
             ente <- cod.ibge[[j]]
 
             # montar a chamada à API
@@ -361,11 +361,11 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   }
 
   # DEFININDO ESTRUTURA PARA MUNICÍPIOS
-  if((all(nchar(cod.ibge) == 7)) & ((isTRUE(simplificado) & !(3 %in% periodo)) | is.null(simplificado) | simplificado == FALSE) ) {
+  if((all(nchar(cod.ibge) == 7)) & ((isTRUE(simplified) & !(3 %in% period)) | is.null(simplified) | simplified == FALSE) ) {
 
 
-      for(z in 1:length(ano)) {
-        cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
+      for(z in 1:length(year)) {
+        cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
 
 
         step2 <- " "
@@ -376,24 +376,24 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
           cli::cli_progress_update(set = j)
 
 
-          for (i in 1:length(poder)) {
+          for (i in 1:length(power)) {
 
 
-            for (w in 1:length(periodo)) {
+            for (w in 1:length(period)) {
 
-              exercicio <- ano[[z]]
-              tempo <- periodo[[w]]
+              exercicio <- year[[z]]
+              tempo <- period[[w]]
 
-              if({simplificado} == TRUE) {
+              if({simplified} == TRUE) {
                 tipo_relatorio <- "RGF+Simplificado"
                 periodicidade = "S"
               } else {
                 tipo_relatorio <- "RGF"
                 periodicidade = "Q"
               }
-              num_anexo <- glue::glue("RGF-Anexo%200",{{anexo}})
+              num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
               esfera <- "M"
-              cod_poder <- poder[[i]]
+              cod_poder <- power[[i]]
               ente <- cod.ibge[[j]]
 
               # montar a chamada à API
@@ -428,7 +428,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
 
 
 
-    if({{num_anexo}} == "RGF-Anexo%2001" & simplificado != TRUE) {
+    if({{num_anexo}} == "RGF-Anexo%2001" & simplified != TRUE) {
       rgf_df0 <- rgf_df %>%
         dplyr::mutate(mes_nome = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~ glue::glue('jan/{exercicio}'),
                                                   periodo == 2 & coluna == '<MR-11>'~ glue::glue('set/{exercicio - 1}'),
@@ -515,7 +515,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
       rgf_df0 <- rgf_df
       # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
       # rm(rgf_df0)
-      if(isTRUE(simplificado) & ncol(rgf_df0) == 0) {
+      if(isTRUE(simplified) & ncol(rgf_df0) == 0) {
         cli::cli_alert_warning("Check the parameters! Change `Simplified` to FALSE \n Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
       } else {
         return(rgf_df0)
