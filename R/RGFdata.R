@@ -52,7 +52,7 @@ RGFdata <- function(cod.ibge = NULL, ano = NULL, poder = NULL, periodo = NULL, a
   }
 
   # DEFININDO ESTRUTURA PARA UNIÃO
-  if(cod.ibge == 1 & (simplificado == FALSE) | is.null(simplificado) ) {
+  if(all(nchar(cod.ibge) == 1) & (simplificado == FALSE) | is.null(simplificado) ) {
 
     for(z in 1:length(ano)) {
       cli::cli_progress_step("EXTRACTING {ano[[z]]}", spinner = TRUE)
