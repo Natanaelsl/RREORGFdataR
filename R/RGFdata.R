@@ -51,6 +51,11 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
     cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
   }
 
+  #DEFININDO SELEÇÃO DE TODOS OS ESTADOS
+  if(cod.ibge == "all_states") {
+    cod.ibge <- RREORGFdataR::siconfi_list() %>% dplyr::filter(nchar(`Código IBGE`) == 2) %>% dplyr::distinct(`Código IBGE`) %>% dplyr::arrange(`Código IBGE`) %>% dplyr::pull() %>% noquote()
+  }
+
   # DEFININDO ESTRUTURA PARA UNIÃO
   if(all(nchar(cod.ibge) == 1) & (simplified == FALSE) | is.null(simplified) ) {
 
