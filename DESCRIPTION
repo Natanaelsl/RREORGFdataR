@@ -20,6 +20,7 @@ Imports:
     httr,
     jsonlite,
     utils,
+    janitor,
     lifecycle
 Suggests: 
     knitr,

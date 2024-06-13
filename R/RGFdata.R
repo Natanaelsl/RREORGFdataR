@@ -35,29 +35,37 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
 
   base_url_rgf <- "https://apidatalake.tesouro.gov.br/ords/siconfi/tt/rgf?"
 
-
   rgf_df <- data.frame(stringsAsFactors = FALSE)
 
+
+  # DEFININDO SELEÇÃO DE TODOS OS ESTADOS
+  if(cod.ibge == "all_states") {
+    cod_ibge <- siconfi_list() %>% janitor::clean_names() %>% dplyr::filter(nchar(codigo_ibge) == 2) %>% dplyr::distinct(codigo_ibge) %>% dplyr::arrange(codigo_ibge) %>% dplyr::pull() %>% base::as.numeric()
+  }
+  #DEFININDO SELEÇÃO DE TODOS OS MUNICÍPIOS
+  else if (cod.ibge == "all_muni") {
+    cod_ibge <- siconfi_list() %>% janitor::clean_names() %>% dplyr::filter(nchar(codigo_ibge) == 7) %>% dplyr::distinct(codigo_ibge) %>% dplyr::arrange(codigo_ibge) %>% dplyr::pull() %>% base::as.numeric()
+  }
+  else {
+    cod_ibge <- cod.ibge
+  }
+
+
   # MENSAGENS DE ERRO
-  if(all(nchar(cod.ibge) == 1) & {simplified} == TRUE ) {
+  if(all(nchar(cod_ibge) == 1) & isTRUE(simplified) ) {
     cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
   }
 
-  if(all(nchar(cod.ibge) == 2) & isTRUE(simplified) ) {
+  if(all(nchar(cod_ibge) == 2) & isTRUE(simplified) ) {
     cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
   }
 
-  if(all(nchar(cod.ibge) == 7) & isTRUE(simplified) & (3 %in% period)) {
+  if(all(nchar(cod_ibge) == 7) & isTRUE(simplified) & (3 %in% period)) {
     cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
   }
 
-  #DEFININDO SELEÇÃO DE TODOS OS ESTADOSS
-  if(cod.ibge == "all_states") {
-    cod.ibge <- RREORGFdataR::siconfi_list() %>% dplyr::filter(nchar(`Código IBGE`) == 2) %>% dplyr::distinct(`Código IBGE`) %>% dplyr::arrange(`Código IBGE`) %>% dplyr::pull() %>% noquote()
-  }
-
   # DEFININDO ESTRUTURA PARA UNIÃO
-  if(all(nchar(cod.ibge) == 1) & (simplified == FALSE) | is.null(simplified) ) {
+  if(all(nchar(cod_ibge) == 1) & (simplified == FALSE) | is.null(simplified) ) {
 
     for(z in 1:length(year)) {
       cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
@@ -65,9 +73,9 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
 
       step0 <- " "
       cli::cli_progress_step("cod. IBGE | {step0}", spinner = TRUE, msg_done = "Finished!")
-      for (j in 1:length(cod.ibge)) {
+      for (j in 1:length(cod_ibge)) {
         Sys.sleep(.1)
-        step0 <- glue::glue("{cod.ibge[[j]]}")
+        step0 <- glue::glue("{cod_ibge[[j]]}")
         cli::cli_progress_update(set = j)
 
 
@@ -83,7 +91,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
             num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
             esfera <- "U"
             cod_poder <- power[[i]]
-            ente <- cod.ibge[[j]]
+            ente <- cod_ibge[[j]]
 
             # montar a chamada à API
             chamada_api_rgf <- paste(base_url_rgf,
@@ -211,7 +219,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
   }
 
   # DEFININDO ESTRUTURA PARA ESTADOS
-  if(all(nchar(cod.ibge) == 2) & (simplified == FALSE) | is.null(simplified) ) {
+  if(all(nchar(cod_ibge) == 2) & (simplified == FALSE) | is.null(simplified) ) {
 
     for(z in 1:length(year)) {
       cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
@@ -219,9 +227,9 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
 
       step1 <- " "
       cli::cli_progress_step("cod. IBGE | {step1}", spinner = TRUE, msg_done = "Finished!")
-      for (j in 1:length(cod.ibge)) {
+      for (j in 1:length(cod_ibge)) {
         Sys.sleep(.1)
-        step1 <- glue::glue("{cod.ibge[[j]]}")
+        step1 <- glue::glue("{cod_ibge[[j]]}")
         cli::cli_progress_update(set = j)
 
 
@@ -237,7 +245,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
             num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
             esfera <- "E"
             cod_poder <- power[[i]]
-            ente <- cod.ibge[[j]]
+            ente <- cod_ibge[[j]]
 
             # montar a chamada à API
             chamada_api_rgf <- paste(base_url_rgf,
@@ -366,7 +374,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
   }
 
   # DEFININDO ESTRUTURA PARA MUNICÍPIOS
-  if((all(nchar(cod.ibge) == 7)) & ((isTRUE(simplified) & !(3 %in% period)) | is.null(simplified) | simplified == FALSE) ) {
+  if((all(nchar(cod_ibge) == 7)) & ((isTRUE(simplified) & !(3 %in% period)) | is.null(simplified) | simplified == FALSE) ) {
 
 
       for(z in 1:length(year)) {
@@ -375,9 +383,9 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
 
         step2 <- " "
         cli::cli_progress_step("cod. IBGE | {step2}", spinner = TRUE, msg_done = "Finished!")
-        for (j in 1:length(cod.ibge)) {
+        for (j in 1:length(cod_ibge)) {
           Sys.sleep(.1)
-          step2 <- glue::glue("{cod.ibge[[j]]}")
+          step2 <- glue::glue("{cod_ibge[[j]]}")
           cli::cli_progress_update(set = j)
 
 
@@ -399,7 +407,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
               num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
               esfera <- "M"
               cod_poder <- power[[i]]
-              ente <- cod.ibge[[j]]
+              ente <- cod_ibge[[j]]
 
               # montar a chamada à API
               chamada_api_rgf <- paste(base_url_rgf,

@@ -29,6 +29,9 @@
 #'
 "_PACKAGE"
 
+# garante que o verificador de pacotes reconheça codigo_ibge como uma variável global.
+utils::globalVariables(c("codigo_ibge"))
+
 ## usethis namespace: start
 #' @importFrom lifecycle deprecated
 ## usethis namespace: end
