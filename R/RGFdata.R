@@ -51,7 +51,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
   }
 
 
-  # MENSAGENS DE ERROo
+  # MENSAGENS DE ERRO
   if(all(nchar(cod_ibge) == 1) & isTRUE(simplified) ) {
     cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
   }
