@@ -38,7 +38,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
   rgf_df <- data.frame(stringsAsFactors = FALSE)
 
 
-  # DEFININDO SELEÇÃO DE TODOS OS ESTADOS
+  # DEFININDO SELEÇÃO DE TODOS OS ESTADOSs
   if(cod.ibge == "all_states") {
     cod_ibge <- siconfi_list() %>% janitor::clean_names() %>% dplyr::filter(nchar(codigo_ibge) == 2) %>% dplyr::distinct(codigo_ibge) %>% dplyr::arrange(codigo_ibge) %>% dplyr::pull() %>% base::as.numeric()
   }
