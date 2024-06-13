@@ -3,7 +3,7 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   RGF: RGF.html
-last_built: 2024-06-13T11:50Z
+last_built: 2024-06-13T11:55Z
 urls:
   reference: https://natanaelsl.github.io/RREORGFdataR/reference
   article: https://natanaelsl.github.io/RREORGFdataR/articles
