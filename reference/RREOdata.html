@@ -70,7 +70,7 @@ Realiza a extração dos dados do Relatório Resumido de Execução Orçamentár
 <span>  cod.ibge <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  period <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  Annex <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  annex <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  simplified <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -89,12 +89,12 @@ Realiza a extração dos dados do Relatório Resumido de Execução Orçamentár
 <dd><p>Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se <code>simplified = TRUE</code>.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.</p></dd>
 
 
-<dt>simplified</dt>
-<dd><p>Tipo do Demonstrativo. RREO Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se <code>TRUE</code> a periodicidade semestral será automaticamente selecionada.</p></dd>
-
-
 <dt>annex</dt>
 <dd><p>Anexos dos demonstrativos do RREO. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.</p></dd>
+
+
+<dt>simplified</dt>
+<dd><p>Tipo do Demonstrativo. RREO Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se <code>TRUE</code> a periodicidade semestral será automaticamente selecionada.</p></dd>
 
 </dl></div>
 
@@ -103,7 +103,7 @@ Realiza a extração dos dados do Relatório Resumido de Execução Orçamentár
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># install.packages("devtools")</span></span></span>
 <span class="r-in"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Natanaelsl/RREORGFdataR"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT in .Renviron (or elsewhere) if you want to use the more secure git credential store instead.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping install of 'RREORGFdataR' from a github remote, the SHA1 (ba273ca2) has not changed since last install.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping install of 'RREORGFdataR' from a github remote, the SHA1 (a3abd60f) has not changed since last install.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Use `force = TRUE` to force installation</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Carregando o pacote</span></span></span>
