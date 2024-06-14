@@ -37,12 +37,12 @@ RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, annex = NULL, 
     if (all(nchar(cod.ibge) == 1 ) & simplified == FALSE) {
       cod.ibge  <- '01'
       esfera <- "U"
-      print('União')
+      #print('União')
 
     } else if (all(nchar(cod.ibge) == 1 ) & simplified == TRUE) {
       cod.ibge  <- '01'
       esfera <- "U"
-      print('União')
+      #print('União')
       cli::cli_alert_danger("The simplified publication only applies to municipalities
                              with less than 50 thousand inhabitants. Not compatible with
                              the cod.ibge provided.")
@@ -50,7 +50,7 @@ RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, annex = NULL, 
     } else if (all(nchar(cod.ibge) == 2 ) & simplified == TRUE) {
       cod.ibge  <- as.character(cod.ibge)
       esfera <- "E"
-      print('estado')
+      #print('estado')
       cli::cli_alert_danger("The simplified publication only applies to municipalities
                              with less than 50 thousand inhabitants. Not compatible with
                              the cod.ibge provided.")
@@ -58,12 +58,12 @@ RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, annex = NULL, 
     }else if (all(nchar(cod.ibge) == 2) & simplified == FALSE) {
       cod.ibge  <- as.character(cod.ibge)
       esfera <- "E"
-      print('estado')
+      #print('estado')
 
 
     } else if (all(nchar(cod.ibge) == 7)) {
       esfera <- "M"
-      print('municipio')
+      #print('municipio')
 
     } else {
       cli::cli_alert_danger("You are selecting several Entities.
