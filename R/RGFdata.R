@@ -6,7 +6,7 @@
 #'
 #' Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
 #'
-#' @param cod.ibge Código IBGE do Ente. se `simplified = TRUE`, então selecione municípios.
+#' @param cod.ibge Código IBGE do Ente. se `simplified = TRUE`, então selecione municípios. Para obter todas as UF's utilize "all_states". Para obter todos os municípios utilize "all_muni".
 #' @param year Exercício do relatório
 #' @param power Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública
 #' @param period Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se `simplified = TRUE`.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.
@@ -30,6 +30,7 @@
 #'         period = 3,
 #'         annex = 1,
 #'         simplified = FALSE)
+#'
 RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, annex = NULL, simplified = FALSE){
 
 

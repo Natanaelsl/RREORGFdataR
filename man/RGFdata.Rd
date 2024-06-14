@@ -14,7 +14,7 @@ RGFdata(
 )
 }
 \arguments{
-\item{cod.ibge}{Código IBGE do Ente. se \code{simplified = TRUE}, então selecione municípios.}
+\item{cod.ibge}{Código IBGE do Ente. se \code{simplified = TRUE}, então selecione municípios. Para obter todas as UF's utilize "all_states". Para obter todos os municípios utilize "all_muni".}
 
 \item{year}{Exercício do relatório}
 
@@ -46,4 +46,5 @@ RGFdata(cod.ibge = 52,
         period = 3,
         annex = 1,
         simplified = FALSE)
+
 }

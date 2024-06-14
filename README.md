@@ -35,7 +35,10 @@ Saiba mais sobre a utilização do ‘RREORGFdataR’ em
 
 <!-- <img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180"> -->
 
-- `RREOdata`: <span style="color:red;">(Em construção.)</span>
+- `RREOdata`: Realiza a extração dos dados do Relatório Resumido da
+  Execução Orçamentária (RREO) de maneira mais intuitiva e fácil
+  utilizando a API do
+  [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/)
 
 - `RGFdata`: Realiza a extração dos dados do Relatório de Gestão Fiscal
   (RGF) de maneira mais intuitiva e fácil utilizando a API do
@@ -75,6 +78,15 @@ library(RREORGFdataR)
 ## Extraindo dados do anexo 1 para o 3º quadrimestre do RGF de 2020 até 2023
 ## do Estado de Goiás para todos os poderes.
 RGFdata(cod.ibge = 52,
+        year = 2020:2023,
+        power = c('E','L','J','D','M'),
+        period = 3,
+        annex = 1,
+        simplified = FALSE)
+        
+## Extraindo dados do anexo 1 para o 3º quadrimestre do RGF de 2023
+## de todos as UF's para todos os poderes.
+RGFdata(cod.ibge = "all_states",
         year = 2023,
         power = c('E','L','J','D','M'),
         period = 3,
