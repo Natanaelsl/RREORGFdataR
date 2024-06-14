@@ -10,5 +10,7 @@ template:
 
 news:
  releases:
+ - text: "RREORGFdataR v1.0.0"
+   href: https://natanaelsl.github.io/RREORGFdataR/news/index.html#rreorgfdatar-v100
  - text: "RREORGFdataR v0.1.0"
    href: https://natanaelsl.github.io/RREORGFdataR/news/index.html#rreorgfdatar-v010
