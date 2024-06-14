@@ -8,7 +8,7 @@ RREOdata(
   cod.ibge = NULL,
   year = NULL,
   period = NULL,
-  Annex = NULL,
+  annex = NULL,
   simplified = FALSE
 )
 }
@@ -19,9 +19,9 @@ RREOdata(
 
 \item{period}{Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se \code{simplified = TRUE}.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.}
 
-\item{simplified}{Tipo do Demonstrativo. RREO Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se \code{TRUE} a periodicidade semestral será automaticamente selecionada.}
-
 \item{annex}{Anexos dos demonstrativos do RREO. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.}
+
+\item{simplified}{Tipo do Demonstrativo. RREO Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se \code{TRUE} a periodicidade semestral será automaticamente selecionada.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
