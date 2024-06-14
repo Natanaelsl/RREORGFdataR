@@ -4,5 +4,5 @@ The "RREORGFdataR" is an R package that allows users to easily access the Budget
 
 This version features the following functions:
 
-The “RGFdata( )” function makes it possible to extract data from the Tax Management Report;
-The "siconfi_list( )" function makes it possible to identify the IBGE code of Brazilian federative entities.
+* The “RGFdata( )” function makes it possible to extract data from the Tax Management Report;
+* The "siconfi_list( )" function makes it possible to identify the IBGE code of Brazilian federative entities.
