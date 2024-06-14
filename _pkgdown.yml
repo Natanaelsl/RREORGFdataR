@@ -8,3 +8,8 @@ template:
     base_font: {google: {family: "Source Sans Pro", wght: [400, 600], ital: [0, 1]}}
     code_font: {google: "Source Code Pro"}
 
+
+news:
+ releases:
+ - text: "RREORGFdataR 0.1.0"
+   href: https://natanaelsl.github.io/RREORGFdataR/news/index.html
