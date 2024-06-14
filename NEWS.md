@@ -1,3 +1,5 @@
+# RREORGFdataR 1.0.0
+
 # RREORGFdataR v0.1.0
 
 The "RREORGFdataR" is an R package that allows users to easily access the Budget Execution Summary Report (RREO) and Fiscal Management Report (RGF) dataset using the SICONFI API (https://apidatalake.tesouro.gov.br/docs/siconfi/).
