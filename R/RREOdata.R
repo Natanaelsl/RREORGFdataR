@@ -29,10 +29,10 @@
 #'         annex = 1,
 #'         simplified = FALSE)
 #'
-RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, Annex = NULL, simplified = FALSE) {
+RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, annex = NULL, simplified = FALSE) {
   options(error = NULL)
   #    Functions
-  check_cod <- function(cod.ibge , year , period , Annex, simplified ) {
+  check_cod <- function(cod.ibge , year , period , annex, simplified ) {
 
     if (all(nchar(cod.ibge) == 1 ) & simplified == FALSE) {
       cod.ibge  <- '01'
@@ -73,7 +73,7 @@ RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, Annex = NULL, 
     }
     return(esfera)
   }
-  esfera <- check_cod(cod.ibge , year , period , Annex, simplified )
+  esfera <- check_cod(cod.ibge , year , period , annex, simplified )
 
   base_url_rreo <- "https://apidatalake.tesouro.gov.br/ords/siconfi/tt/rreo?"
 
@@ -90,11 +90,11 @@ RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, Annex = NULL, 
     tempo <- as.character(period)
     tipo_relatorio <- "RREO"
 
-    num_anexo <- ifelse(Annex < 10,
+    num_anexo <- ifelse(annex < 10,
                         glue::glue("RREO-Anexo%200",
-                                   Annex),
+                                   annex),
                         glue::glue("RREO-Anexo%20",
-                                   Annex))
+                                   annex))
 
 
     ente <- as.character(cod.ibge)
