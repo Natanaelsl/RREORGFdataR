@@ -29,8 +29,14 @@ Retorna informações sobre os códigos do IBGE e do Siconfi e as respectivas in
     <a class="dropdown-item" href="../articles/RGF.html">RGF</a>
   </div>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-not-cia">Notícia</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-not-cia">
+    <h6 class="dropdown-header" data-toc-skip>Lançamentos</h6>
+    <a class="dropdown-item" href="https://natanaelsl.github.io/RREORGFdataR/news/index.html">RREORGFdataR 0.1.0</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../news/index.html">Changelog</a>
+  </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Alternar de navegação" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Procurar" autocomplete="off"></form>
@@ -75,7 +81,7 @@ Retorna informações sobre os códigos do IBGE e do Siconfi e as respectivas in
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># install.packages("devtools")</span></span></span>
 <span class="r-in"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Natanaelsl/RREORGFdataR"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT in .Renviron (or elsewhere) if you want to use the more secure git credential store instead.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping install of 'RREORGFdataR' from a github remote, the SHA1 (75f8a356) has not changed since last install.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping install of 'RREORGFdataR' from a github remote, the SHA1 (e72539c5) has not changed since last install.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Use `force = TRUE` to force installation</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Carregando o pacote</span></span></span>
