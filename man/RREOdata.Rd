@@ -30,17 +30,17 @@ Realiza a extração dos dados do Relatório Resumido de Execução Orçamentár
 }
 \examples{
 # install.packages("devtools")
-devtools::install_github("Natanaelsl/RREORGFdataR")
+# devtools::install_github("Natanaelsl/RREORGFdataR")
 
 # Carregando o pacote
 library(RREORGFdataR)
 
 # Extraindo dados do anexo 1, 6º bimestre
 # do RREO de 2020 até 2023 do Estado de Goiás.
-RREOdata(cod.ibge = 52,
-        year = c(2020:2023),
-        period = 3,
-        annex = 1,
-        simplified = FALSE)
+df.RREO <- RREOdata(cod.ibge = 52,
+                    year = c(2020:2023),
+                    period = 6,
+                    annex = 1,
+                    simplified = FALSE)
 
 }
