@@ -22,12 +22,13 @@
 #' library(RREORGFdataR)
 #'
 #' # Extraindo dados do anexo 1, 6º bimestre
-#' # do RREO de 2020 até 2023 do Estado de Goiás.
-#' df.RREO <- RREOdata(cod.ibge = 52,
-#'                     year = c(2020:2023),
-#'                     period = 6,
-#'                     annex = 1,
-#'                     simplified = FALSE)
+#' # do RREO de 2023 do Estado de Goiás.
+#' RREOdata(cod.ibge = 52,
+#'          year = 2023,
+#'          period = 6,
+#'          annex = 1,
+#'          simplified = FALSE) %>%
+#'          head(., n = 5)
 #'
 RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, annex = NULL, simplified = FALSE) {
   options(error = NULL)

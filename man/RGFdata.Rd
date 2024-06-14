@@ -39,12 +39,13 @@ Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira 
 library(RREORGFdataR)
 
 # Extraindo dados do anexo 1 para o 3º quadrimestre
-# do RGF de 2020 até 2023 do Estado de Goiás para todos os poderes.
-df.RGF <- RGFdata(cod.ibge = 52,
-                  year = c(2020:2023),
-                  power = c('E','L','J','D','M'),
-                  period = 3,
-                  annex = 1,
-                  simplified = FALSE)
+# do RGF de 2023 do Estado de Goiás para todos os poderes.
+RGFdata(cod.ibge = 52,
+        year = 2023,
+        power = c('E','L','J','D','M'),
+        period = 3,
+        annex = 1,
+        simplified = FALSE) \%>\%
+        head(., n = 5)
 
 }
