@@ -81,8 +81,18 @@ Retorna informações sobre os códigos do IBGE e do Siconfi e as respectivas in
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># install.packages("devtools")</span></span></span>
 <span class="r-in"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Natanaelsl/RREORGFdataR"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT in .Renviron (or elsewhere) if you want to use the more secure git credential store instead.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping install of 'RREORGFdataR' from a github remote, the SHA1 (a3abd60f) has not changed since last install.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Use `force = TRUE` to force installation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading GitHub repo Natanaelsl/RREORGFdataR@HEAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD build</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for file ‘/tmp/RtmpTZM9wX/remotes17162a13f831/Natanaelsl-RREORGFdataR-b725145/DESCRIPTION’ ... OK</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * preparing ‘RREORGFdataR’:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking DESCRIPTION meta-information ... OK</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for LF line-endings in source and make files and shell scripts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * checking for empty or unneeded directories</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * building ‘RREORGFdataR_0.1.0.9000.tar.gz’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Installing package into ‘/home/runner/work/_temp/Library’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (as ‘lib’ is unspecified)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Carregando o pacote</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://natanaelsl.github.io/RREORGFdataR/">RREORGFdataR</a></span><span class="op">)</span></span></span>
@@ -90,8 +100,28 @@ Retorna informações sobre os códigos do IBGE e do Siconfi e as respectivas in
 <span class="r-in"><span><span class="co"># Reportando `data.frame` com os códigos disponibilizados pelo Tesouro Nacional</span></span></span>
 <span class="r-in"><span><span class="fu">siconfi_list</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>internal error 1 in R_decompress1 with libdeflate</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in utils::tail(., 10):</span> lazy-load database '/home/runner/work/_temp/Library/RREORGFdataR/R/RREORGFdataR.rdb' is corrupt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Código IBGE Código Siconfi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11330     5221858      5221858LG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11331     5221908      5221908EX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11332     5221908      5221908LG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11333     5222005      5222005EX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11334     5222005      5222005LG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11335     5222054      5222054EX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11336     5222054      5222054LG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11337     5222203      5222203EX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11338     5222203      5222203LG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11339     5222302      5222302EX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                            Instituição</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11330 Câmara de Vereadores de Valparaíso de Goiás - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11331              Prefeitura Municipal de Varjão - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11332              Câmara de Vereadores de Varjão - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11333          Prefeitura Municipal de Vianópolis - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11334          Câmara de Vereadores de Vianópolis - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11335      Prefeitura Municipal de Vicentinópolis - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11336      Câmara de Vereadores de Vicentinópolis - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11337            Prefeitura Municipal de Vila Boa - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11338            Câmara de Vereadores de Vila Boa - GO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11339       Prefeitura Municipal de Vila Propício - GO</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Baixando arquivo (.pdf) disponibilizado pelo Tesouro Nacional</span></span></span>
 <span class="r-in"><span><span class="co"># apresentando lista com os códigos</span></span></span>
