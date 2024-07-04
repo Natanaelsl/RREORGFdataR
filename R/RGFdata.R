@@ -85,6 +85,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
 
 
           for (w in 1:length(period)) {
+            Sys.sleep(1)
 
             exercicio <- year[[z]]
             periodicidade = "Q"
@@ -239,6 +240,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
 
 
           for (w in 1:length(period)) {
+            Sys.sleep(1)
 
             exercicio <- year[[z]]
             periodicidade = "Q"
@@ -395,6 +397,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
 
 
             for (w in 1:length(period)) {
+              Sys.sleep(1)
 
               exercicio <- year[[z]]
               tempo <- period[[w]]
