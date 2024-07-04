@@ -76,7 +76,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
       step0 <- " "
       cli::cli_progress_step("cod. IBGE | {step0}", spinner = TRUE, msg_done = "Finished!")
       for (j in 1:length(cod_ibge)) {
-        Sys.sleep(.1)
+        Sys.sleep(1)
         step0 <- glue::glue("{cod_ibge[[j]]}")
         cli::cli_progress_update(set = j)
 
@@ -230,7 +230,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
       step1 <- " "
       cli::cli_progress_step("cod. IBGE | {step1}", spinner = TRUE, msg_done = "Finished!")
       for (j in 1:length(cod_ibge)) {
-        Sys.sleep(.1)
+        Sys.sleep(1)
         step1 <- glue::glue("{cod_ibge[[j]]}")
         cli::cli_progress_update(set = j)
 
@@ -386,7 +386,7 @@ RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, a
         step2 <- " "
         cli::cli_progress_step("cod. IBGE | {step2}", spinner = TRUE, msg_done = "Finished!")
         for (j in 1:length(cod_ibge)) {
-          Sys.sleep(.1)
+          Sys.sleep(1)
           step2 <- glue::glue("{cod_ibge[[j]]}")
           cli::cli_progress_update(set = j)
 
