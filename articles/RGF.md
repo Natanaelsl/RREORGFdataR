@@ -91,6 +91,8 @@ df_rgf_uniao %>%
   )
 ```
 
+![](RGF_files/figure-html/ex1-1.png)
+
 ## Exemplo 2: Análise Transversal (Comparação entre Poderes)
 
 Diferente do RREO, o RGF é segregado por Poder governamental. A
@@ -154,6 +156,8 @@ df_poderes_go %>%
     panel.grid.minor.x = element_blank()
   )
 ```
+
+![](RGF_files/figure-html/ex2-1.png)
 
 ## Exemplo 3: Ingestão de Data Lake (Persistência em Parquet)
 

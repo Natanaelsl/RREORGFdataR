@@ -50,7 +50,7 @@ siconfi_list(action = "download")
 # 3. Baixar o PDF para uma pasta específica do projeto (Cross-platform)
 siconfi_list(
   action = "download",
-  dest_dir = "C:/meus_dados/referencias"
+  dest_dir = "C:/Temp/"
 )
 } # }
 ```

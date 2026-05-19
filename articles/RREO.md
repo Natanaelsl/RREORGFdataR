@@ -82,6 +82,8 @@ df_rreo_go %>%
   )
 ```
 
+![](RREO_files/figure-html/ex1-serie-historica-1.png)
+
 ## Exemplo 2: Análise Transversal (Comparação entre Entes)
 
 A nova arquitetura vetorizada permite passar múltiplos códigos IBGE de
@@ -138,6 +140,8 @@ df_municipios %>%
     panel.grid.minor.x = element_blank()
   )
 ```
+
+![](RREO_files/figure-html/ex2-comparacao-entes-1.png)
 
 ## Exemplo 3: Criação de Banco de Dados (Persistência em Parquet)
 
