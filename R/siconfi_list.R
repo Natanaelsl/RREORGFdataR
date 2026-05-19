@@ -63,19 +63,27 @@ siconfi_list <- function(action = c("view", "download"), dest_dir = getwd()) {
     # Normaliza o caminho para garantir compatibilidade estrutural (Windows, macOS, Linux)
     caminho_arquivo <- normalizePath(file.path(dest_dir, "Cod_instituicoes_siconfi.pdf"), mustWork = FALSE)
 
-    cli::cli_progress_step("Baixando arquivo PDF do Tesouro Nacional...")
+    # Inicia o step e salva o ID na memória
+    step_id <- cli::cli_progress_step("Baixando arquivo PDF do Tesouro Nacional...")
 
-    # tryCatch protege a sessão caso o site do Tesouro caia no momento do download
     tryCatch({
-      # quiet = TRUE silencia logs feios do base R para dar espaço ao UI do cli
       utils::download.file(url, destfile = caminho_arquivo, mode = "wb", quiet = TRUE)
+
+      # 1. Encerra o spinner de progresso explicitamente com sucesso
+      cli::cli_progress_done(step_id)
+
+      # 2. Só então, emite o alerta final com o caminho
       cli::cli_alert_success("Arquivo salvo com sucesso em: {.path {caminho_arquivo}}")
+
     }, error = function(e) {
+
+      # Em caso de erro, atualiza o status do spinner para falha
+      cli::cli_progress_done(step_id, result = "failed")
       cli::cli_abort(c(
-        "x" = "Falha ao realizar o download do arquivo.",
-        "i" = "Detalhe do erro: {e$message}",
-        "*" = "Verifique sua conex\u00e3o com a internet ou se o URL da API do Tesouro foi descontinuado."
+        "x" = "Falha ao baixar o arquivo do Tesouro Nacional.",
+        "i" = "Detalhe do erro: {e$message}"
       ))
+
     })
 
     return(invisible(caminho_arquivo))

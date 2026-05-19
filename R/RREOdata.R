@@ -66,7 +66,7 @@
 #' # gc() # Chama o garbage collector para limpar a RAM
 #' # tab.parquet <- arrow::open_dataset("data/storage/rreo_estados_2024.parquet")
 #' # tab.parquet |>
-#' #  filter(id_ente == "52") |>
+#' #  filter(cod_ibge == "52") |>
 #' #  collect()
 #' }
 RREOdata <- function(cod.ibge = NULL, year = NULL, period = NULL, annex = NULL, simplified = FALSE, save_path = NULL) {

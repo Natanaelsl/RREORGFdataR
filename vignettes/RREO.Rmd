@@ -50,7 +50,7 @@ df_rreo_go <- RREOdata(
 # Filtrando a Receita Corrente Líquida consolidada e plotando
 df_rreo_go %>%
   filter(
-    cod_conta == "ReceitaCorrenteLiquida",
+    cod_conta == "RREO3ReceitaCorrenteLiquida",
     coluna == "TOTAL (ÚLTIMOS 12 MESES)"
   ) %>%
   ggplot(aes(x = exercicio, y = valor)) +
@@ -98,27 +98,33 @@ df_municipios <- RREOdata(
 # Comparando Despesas Empenhadas
 df_municipios %>%
   filter(
-    conta == "Despesas Empenhadas",
-    coluna == "Até o Bimestre"
+    conta == "PESSOAL E ENCARGOS SOCIAIS",
+    coluna == "DESPESAS EMPENHADAS ATÉ O BIMESTRE (f)"
   ) %>%
   mutate(
     municipio = case_when(
-      id_ibge == 5208707 ~ "Goiânia",
-      id_ibge == 5201405 ~ "Aparecida de G.",
-      id_ibge == 5201108 ~ "Anápolis"
-    ),
-    municipio = reorder(municipio, valor) # Ordena do maior para o menor
+      cod_ibge == 5208707 ~ "Goiânia",
+      cod_ibge == 5201405 ~ "Aparecida de G.",
+      cod_ibge == 5201108 ~ "Anápolis"
+    )
   ) %>%
+  # PASSO CRÍTICO: Agrupar e somar para garantir uma única linha por ente
+  group_by(municipio) %>%
+  summarise(valor = sum(valor, na.rm = TRUE), .groups = "drop") %>%
+  # Ordenação movida para depois da sumarização
+  mutate(municipio = reorder(municipio, valor)) %>%
   ggplot(aes(x = municipio, y = valor, fill = municipio)) +
   geom_col(show.legend = FALSE) +
   geom_text(
     aes(label = paste0("R$ ", round(valor/1e6, 1), " Mi")),
-    hjust = -0.1, fontface = "bold", color = "#34495e"
+    hjust = -0.1, 
+    fontface = "bold", 
+    color = "#34495e"
   ) +
   coord_flip() +
   scale_fill_brewer(palette = "Blues") +
   labs(
-    title = "Despesas Empenhadas (1º Bimestre de 2023)",
+    title = "Despesas Empenhadas com Pessoal (1º Bimestre de 2023)",
     x = "", y = ""
   ) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.3))) +
@@ -154,6 +160,6 @@ dataset_rreo <- open_dataset("dados_rreo_estados_2023.parquet")
 
 # O motor C++ do Arrow filtra os dados sem carregar tudo na memória RAM
 dados_mg <- dataset_rreo %>%
-  filter(id_ibge == "31") %>% # IBGE de Minas Gerais
+  filter(cod_ibge == 31) %>% # IBGE de Minas Gerais
   collect()                   # Traz apenas o resultado para o R
 ```
