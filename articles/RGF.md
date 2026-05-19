@@ -118,7 +118,7 @@ df_poderes_go <- RGFdata(
 df_poderes_go %>%
   filter(
     cod_conta == "DespesaComPessoalLiquida",
-    coluna == "VALOR"
+    coluna == "TOTAL (ÚLTIMOS 12 MESES) (a)"
   ) %>%
   mutate(
     co_poder = case_when(
@@ -127,9 +127,13 @@ df_poderes_go %>%
       co_poder == "J" ~ "Judiciário",
       co_poder == "M" ~ "Min. Público",
       co_poder == "D" ~ "Defensoria"
-    ),
-    co_poder = reorder(co_poder, valor)
+    )
   ) %>%
+  # PASSO CRÍTICO: Consolida as linhas divididas do mesmo poder (ex: Assembleia + TCE)
+  group_by(co_poder) %>%
+  summarise(valor = sum(valor, na.rm = TRUE), .groups = "drop") %>%
+  # Ordena do menor para o maior APÓS a soma
+  mutate(co_poder = reorder(co_poder, valor)) %>%
   ggplot(aes(x = co_poder, y = valor, fill = co_poder)) +
   geom_col(show.legend = FALSE) +
   geom_text(
@@ -137,7 +141,7 @@ df_poderes_go %>%
     hjust = -0.1, fontface = "bold", color = "#34495e"
   ) +
   coord_flip() +
-  scale_fill_brewer(palette = "Teal") +
+  scale_fill_brewer(palette = "Greens") + # Ajustado para paleta nativa válida
   labs(
     title = "Despesa com Pessoal Líquida por Poder - Goiás (2023)",
     x = "", y = ""
@@ -177,6 +181,6 @@ dataset_rgf <- open_dataset("dados_rgf_municipios_2023.parquet")
 
 # O motor C++ filtra direto do HD, sem carregar o país inteiro na RAM
 dados_goiania <- dataset_rgf %>%
-  filter(id_ente == "5208707") %>% 
+  filter(cod_ibge == "5208707") %>% 
   collect()
 ```

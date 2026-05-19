@@ -125,7 +125,7 @@ visualização clara da evolução da arrecadação ao longo do tempo.</p>
 <span><span class="co"># Filtrando a Receita Corrente Líquida consolidada e plotando</span></span>
 <span><span class="va">df_rreo_go</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
-<span>    <span class="va">cod_conta</span> <span class="op">==</span> <span class="st">"ReceitaCorrenteLiquida"</span>,</span>
+<span>    <span class="va">cod_conta</span> <span class="op">==</span> <span class="st">"RREO3ReceitaCorrenteLiquida"</span>,</span>
 <span>    <span class="va">coluna</span> <span class="op">==</span> <span class="st">"TOTAL (ÚLTIMOS 12 MESES)"</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">exercicio</span>, y <span class="op">=</span> <span class="va">valor</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -173,27 +173,33 @@ três grandes municípios goianos no 1º bimestre de 2023.</p>
 <span><span class="co"># Comparando Despesas Empenhadas</span></span>
 <span><span class="va">df_municipios</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
-<span>    <span class="va">conta</span> <span class="op">==</span> <span class="st">"Despesas Empenhadas"</span>,</span>
-<span>    <span class="va">coluna</span> <span class="op">==</span> <span class="st">"Até o Bimestre"</span></span>
+<span>    <span class="va">conta</span> <span class="op">==</span> <span class="st">"PESSOAL E ENCARGOS SOCIAIS"</span>,</span>
+<span>    <span class="va">coluna</span> <span class="op">==</span> <span class="st">"DESPESAS EMPENHADAS ATÉ O BIMESTRE (f)"</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    municipio <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span>      <span class="va">id_ibge</span> <span class="op">==</span> <span class="fl">5208707</span> <span class="op">~</span> <span class="st">"Goiânia"</span>,</span>
-<span>      <span class="va">id_ibge</span> <span class="op">==</span> <span class="fl">5201405</span> <span class="op">~</span> <span class="st">"Aparecida de G."</span>,</span>
-<span>      <span class="va">id_ibge</span> <span class="op">==</span> <span class="fl">5201108</span> <span class="op">~</span> <span class="st">"Anápolis"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    municipio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">municipio</span>, <span class="va">valor</span><span class="op">)</span> <span class="co"># Ordena do maior para o menor</span></span>
+<span>      <span class="va">cod_ibge</span> <span class="op">==</span> <span class="fl">5208707</span> <span class="op">~</span> <span class="st">"Goiânia"</span>,</span>
+<span>      <span class="va">cod_ibge</span> <span class="op">==</span> <span class="fl">5201405</span> <span class="op">~</span> <span class="st">"Aparecida de G."</span>,</span>
+<span>      <span class="va">cod_ibge</span> <span class="op">==</span> <span class="fl">5201108</span> <span class="op">~</span> <span class="st">"Anápolis"</span></span>
+<span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="co"># PASSO CRÍTICO: Agrupar e somar para garantir uma única linha por ente</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">municipio</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>valor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">valor</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="co"># Ordenação movida para depois da sumarização</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>municipio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">municipio</span>, <span class="va">valor</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">municipio</span>, y <span class="op">=</span> <span class="va">valor</span>, fill <span class="op">=</span> <span class="va">municipio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"R$ "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">valor</span><span class="op">/</span><span class="fl">1e6</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">" Mi"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, fontface <span class="op">=</span> <span class="st">"bold"</span>, color <span class="op">=</span> <span class="st">"#34495e"</span></span>
+<span>    hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, </span>
+<span>    fontface <span class="op">=</span> <span class="st">"bold"</span>, </span>
+<span>    color <span class="op">=</span> <span class="st">"#34495e"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Blues"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Despesas Empenhadas (1º Bimestre de 2023)"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Despesas Empenhadas com Pessoal (1º Bimestre de 2023)"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -232,7 +238,7 @@ armazenamento e velocidade de leitura futura.</p>
 <span></span>
 <span><span class="co"># O motor C++ do Arrow filtra os dados sem carregar tudo na memória RAM</span></span>
 <span><span class="va">dados_mg</span> <span class="op">&lt;-</span> <span class="va">dataset_rreo</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">id_ibge</span> <span class="op">==</span> <span class="st">"31"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># IBGE de Minas Gerais</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cod_ibge</span> <span class="op">==</span> <span class="fl">31</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># IBGE de Minas Gerais</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span>                   <span class="co"># Traz apenas o resultado para o R</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

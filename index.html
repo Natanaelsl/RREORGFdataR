@@ -73,10 +73,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="rreorgfdatar-">RREORGFdataR 
-<a class="anchor" aria-label="anchor" href="#rreorgfdatar-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="rreorgfdatar">RREORGFdataR<a class="anchor" aria-label="anchor" href="#rreorgfdatar"></a>
 </h1>
 </div>
+<p><a href="https://natanaelsl.com.br" class="external-link"><img src="reference/figures/Logo_2.png" align="right" width="138" alt="RREORGFdataR_2 website" class="logo" style="margin-right: 5px;"><img src="reference/figures/logo.png" align="right" width="138" alt="RREORGFdataR_1 website" class="logo"></a></p>
 <!-- badges: start -->
 <!-- [![CRAN/METACRAN Version](https://www.r-pkg.org/badges/version/geouy)](https://CRAN.R-project.org/package=geouy) -->
 <!-- [![CRAN/METACRAN Total downloads](https://cranlogs.r-pkg.org/badges/grand-total/geouy?color=blue)](https://CRAN.R-project.org/package=geouy)  -->
@@ -85,15 +85,16 @@
 <!-- [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/RichDeto/geouy?branch=master&svg=true)](https://ci.appveyor.com/project/RichDeto/geouy) -->
 <!-- [![R](https://github.com/Natanaelsl/NCAGEDdataR/actions/workflows/r.yml/badge.svg)](https://github.com/Natanaelsl/NCAGEDdataR/actions/workflows/r.yml) -->
 
+<!-- <img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180"> -->
+<p><strong>RREORGFdataR</strong> é um pacote R focado em alta performance para a extração, consolidação e automação de dados orçamentários e fiscais provenientes da API do SICONFI (<a href="https://apidatalake.tesouro.gov.br/docs/siconfi/" class="external-link uri">https://apidatalake.tesouro.gov.br/docs/siconfi/</a>). O pacote foi projetado para analistas e pesquisadores que necessitam integrar grandes volumes de dados (RREO e RGF) em fluxos de trabalho de Ciência de Dados de forma eficiente.</p>
+<p>Saiba mais sobre a utilização do ‘RREORGFdataR’ em <a href="https://natanaelsl.com.br/project/rreorgf_pkg/" class="external-link uri">https://natanaelsl.com.br/project/rreorgf_pkg/</a> ou <a href="https://natanaelsl.github.io/RREORGFdataR/" class="uri">https://natanaelsl.github.io/RREORGFdataR/</a>.</p>
 <div class="section level2">
 <h2 id="visão-geral">Visão geral<a class="anchor" aria-label="anchor" href="#vis%C3%A3o-geral"></a>
 </h2>
-<p><strong>RREORGFdataR</strong> é um pacote R focado em alta performance para a extração, consolidação e automação de dados orçamentários e fiscais provenientes da API do SICONFI (<a href="https://apidatalake.tesouro.gov.br/docs/siconfi/" class="external-link uri">https://apidatalake.tesouro.gov.br/docs/siconfi/</a>). O pacote foi projetado para analistas e pesquisadores que necessitam integrar grandes volumes de dados (RREO e RGF) em fluxos de trabalho de Ciência de Dados de forma eficiente. Saiba mais sobre a utilização do ‘RREORGFdataR’ em <a href="https://natanaelsl.com.br/project/rreorgf_pkg/" class="external-link uri">https://natanaelsl.com.br/project/rreorgf_pkg/</a> ou <a href="https://natanaelsl.github.io/RREORGFdataR/" class="uri">https://natanaelsl.github.io/RREORGFdataR/</a>.</p>
-<!-- <img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180"> -->
 <ul>
-<li><p><code>RREOdata</code>: Realiza a extração automatizada e em lote dos dados do Relatório Resumido da Execução Orçamentária (<em>RREO</em>). A função utiliza uma arquitetura de malha paramétrica (produto cartesiano) para resolver múltiplas consultas em uma única chamada, otimizando o consumo de RAM através de pré-alocação de memória e processamento determinístico.</p></li>
-<li><p><code>RGFdata</code>: Extrai de forma intuitiva os dados do Relatório de Gestão Fiscal (<em>RGF</em>). Compartilha a mesma engine de alta performance do <code>RREOdata</code>, permitindo a consulta multivariada de anos, entes federativos, poderes e períodos de referência com consistência total no formato dos dados.</p></li>
-<li><p><code>siconfi_list</code>: Ferramenta de gestão de metadados. A opção <code>action = "view"</code> (padrão) carrega o dicionário de códigos do IBGE e SICONFI diretamente da estrutura interna do pacote. A opção <code>action = "download"</code> provê integração direta com o repositório do Tesouro Nacional, baixando o catálogo oficial em PDF com gerenciamento inteligente de caminhos de diretório (cross-platform).</p></li>
+<li><p><code><a href="reference/RREOdata.html">RREOdata()</a></code>: Realiza a extração automatizada e em lote dos dados do Relatório Resumido da Execução Orçamentária (<em>RREO</em>). A função utiliza uma arquitetura de malha paramétrica (produto cartesiano) para resolver múltiplas consultas em uma única chamada, otimizando o consumo de RAM através de pré-alocação de memória e processamento determinístico.</p></li>
+<li><p><code><a href="reference/RGFdata.html">RGFdata()</a></code>: Extrai de forma intuitiva os dados do Relatório de Gestão Fiscal (<em>RGF</em>). Compartilha a mesma engine de alta performance do <code>RREOdata</code>, permitindo a consulta multivariada de anos, entes federativos, poderes e períodos de referência com consistência total no formato dos dados.</p></li>
+<li><p><code><a href="reference/siconfi_list.html">siconfi_list()</a></code>: Ferramenta de gestão de metadados. A opção <code>action = "view"</code> (padrão) carrega o dicionário de códigos do IBGE e SICONFI diretamente da estrutura interna do pacote. A opção <code>action = "download"</code> provê integração direta com o repositório do Tesouro Nacional, baixando o catálogo oficial em PDF com gerenciamento inteligente de caminhos de diretório (cross-platform).</p></li>
 </ul>
 <!-- <br /> -->
 </div>

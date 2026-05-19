@@ -45,10 +45,9 @@ base_siconfi <- siconfi_list(action = "view")
 
 # Buscando o código IBGE do município de 'Aparecida de Goiânia'
 codigo_busca <- base_siconfi %>%
-  filter(grepl("Aparecida de Goiânia", instituicao, ignore.case = TRUE)) %>%
-  select(codigo_ibge, instituicao, uf)
-
-print(codigo_busca)
+  filter(grepl("Aparecida de Goiânia", Instituição, ignore.case = TRUE)) %>%
+  select(`Código IBGE`, Instituição) %>% 
+  print()
 ```
 
 ## Exemplo 2: Download do Catálogo Técnico Oficial (`action = "download"`)

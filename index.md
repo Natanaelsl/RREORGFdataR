@@ -1,6 +1,7 @@
 # RREORGFdataR
 
-## Visão geral
+[![RREORGFdataR_2 website](reference/figures/Logo_2.png)![RREORGFdataR_1
+website](reference/figures/logo.png)](https://natanaelsl.com.br)
 
 **RREORGFdataR** é um pacote R focado em alta performance para a
 extração, consolidação e automação de dados orçamentários e fiscais
@@ -8,29 +9,34 @@ provenientes da API do SICONFI
 (<https://apidatalake.tesouro.gov.br/docs/siconfi/>). O pacote foi
 projetado para analistas e pesquisadores que necessitam integrar grandes
 volumes de dados (RREO e RGF) em fluxos de trabalho de Ciência de Dados
-de forma eficiente. Saiba mais sobre a utilização do ‘RREORGFdataR’ em
+de forma eficiente.
+
+Saiba mais sobre a utilização do ‘RREORGFdataR’ em
 <https://natanaelsl.com.br/project/rreorgf_pkg/> ou
 <https://natanaelsl.github.io/RREORGFdataR/>.
 
-- `RREOdata`: Realiza a extração automatizada e em lote dos dados do
-  Relatório Resumido da Execução Orçamentária (*RREO*). A função utiliza
-  uma arquitetura de malha paramétrica (produto cartesiano) para
-  resolver múltiplas consultas em uma única chamada, otimizando o
-  consumo de RAM através de pré-alocação de memória e processamento
-  determinístico.
+## Visão geral
 
-- `RGFdata`: Extrai de forma intuitiva os dados do Relatório de Gestão
-  Fiscal (*RGF*). Compartilha a mesma engine de alta performance do
-  `RREOdata`, permitindo a consulta multivariada de anos, entes
-  federativos, poderes e períodos de referência com consistência total
-  no formato dos dados.
+- [`RREOdata()`](https://natanaelsl.github.io/RREORGFdataR/reference/RREOdata.md):
+  Realiza a extração automatizada e em lote dos dados do Relatório
+  Resumido da Execução Orçamentária (*RREO*). A função utiliza uma
+  arquitetura de malha paramétrica (produto cartesiano) para resolver
+  múltiplas consultas em uma única chamada, otimizando o consumo de RAM
+  através de pré-alocação de memória e processamento determinístico.
 
-- `siconfi_list`: Ferramenta de gestão de metadados. A opção
-  `action = "view"` (padrão) carrega o dicionário de códigos do IBGE e
-  SICONFI diretamente da estrutura interna do pacote. A opção
-  `action = "download"` provê integração direta com o repositório do
-  Tesouro Nacional, baixando o catálogo oficial em PDF com gerenciamento
-  inteligente de caminhos de diretório (cross-platform).
+- [`RGFdata()`](https://natanaelsl.github.io/RREORGFdataR/reference/RGFdata.md):
+  Extrai de forma intuitiva os dados do Relatório de Gestão Fiscal
+  (*RGF*). Compartilha a mesma engine de alta performance do `RREOdata`,
+  permitindo a consulta multivariada de anos, entes federativos, poderes
+  e períodos de referência com consistência total no formato dos dados.
+
+- [`siconfi_list()`](https://natanaelsl.github.io/RREORGFdataR/reference/siconfi_list.md):
+  Ferramenta de gestão de metadados. A opção `action = "view"` (padrão)
+  carrega o dicionário de códigos do IBGE e SICONFI diretamente da
+  estrutura interna do pacote. A opção `action = "download"` provê
+  integração direta com o repositório do Tesouro Nacional, baixando o
+  catálogo oficial em PDF com gerenciamento inteligente de caminhos de
+  diretório (cross-platform).
 
 ## Principais Funcionalidades
 
