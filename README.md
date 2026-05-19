@@ -4,11 +4,17 @@
 # RREORGFdataR <a href="https://natanaelsl.com.br"><img src="man/figures/Logo_2.png" align="right" width="138" alt="RREORGFdataR_2 website" class="logo" style="margin-right: 5px;" /><img src="man/figures/logo.png" align="right" width="138" alt="RREORGFdataR_1 website" class="logo" /></a>
 
 <!-- badges: start -->
+
 <!-- [![CRAN/METACRAN Version](https://www.r-pkg.org/badges/version/geouy)](https://CRAN.R-project.org/package=geouy) -->
+
 <!-- [![CRAN/METACRAN Total downloads](https://cranlogs.r-pkg.org/badges/grand-total/geouy?color=blue)](https://CRAN.R-project.org/package=geouy)  -->
+
 <!-- [![CRAN/METACRAN downloads per month](https://cranlogs.r-pkg.org/badges/geouy?color=orange)](https://CRAN.R-project.org/package=geouy) -->
+
 <!-- <br /> -->
+
 <!-- [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/RichDeto/geouy?branch=master&svg=true)](https://ci.appveyor.com/project/RichDeto/geouy) -->
+
 <!-- [![R](https://github.com/Natanaelsl/NCAGEDdataR/actions/workflows/r.yml/badge.svg)](https://github.com/Natanaelsl/NCAGEDdataR/actions/workflows/r.yml) -->
 
 [![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
@@ -25,32 +31,54 @@ stars](https://img.shields.io/github/stars/Natanaelsl/pagedreport?color=orange)
 
 ## Visão geral
 
-**RREORGFdataR** é um pacote R que permite aos usuários acessar
-facilmente o conjunto de dados do Relatório Resumido da Execução
-Orçamentária (RREO) e do Relatório de Gestão Fiscal (RGF) utilizando a
-API do SICONFI (<https://apidatalake.tesouro.gov.br/docs/siconfi/>).
-Saiba mais sobre a utilização do ‘RREORGFdataR’ em
+**RREORGFdataR** é um pacote R focado em alta performance para a
+extração, consolidação e automação de dados orçamentários e fiscais
+provenientes da API do SICONFI
+(<https://apidatalake.tesouro.gov.br/docs/siconfi/>). O pacote foi
+projetado para analistas e pesquisadores que necessitam integrar grandes
+volumes de dados (RREO e RGF) em fluxos de trabalho de Ciência de Dados
+de forma eficiente. Saiba mais sobre a utilização do ‘RREORGFdataR’ em
 <https://natanaelsl.com.br/project/rreorgf_pkg/> ou
 <https://natanaelsl.github.io/RREORGFdataR/>.
 
 <!-- <img align="right" src="man/figures/Logo_1.png" alt="logo" width="180"><img align="right" src="man/figures/Logo_2.png" alt="logo" width="180"> -->
 
-- `RREOdata`: Realiza a extração dos dados do Relatório Resumido da
-  Execução Orçamentária (RREO) de maneira mais intuitiva e fácil
-  utilizando a API do
-  [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/)
+- `RREOdata`: Realiza a extração automatizada e em lote dos dados do
+  Relatório Resumido da Execução Orçamentária (*RREO*). A função utiliza
+  uma arquitetura de malha paramétrica (produto cartesiano) para
+  resolver múltiplas consultas em uma única chamada, otimizando o
+  consumo de RAM através de pré-alocação de memória e processamento
+  determinístico.
 
-- `RGFdata`: Realiza a extração dos dados do Relatório de Gestão Fiscal
-  (RGF) de maneira mais intuitiva e fácil utilizando a API do
-  [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
+- `RGFdata`: Extrai de forma intuitiva os dados do Relatório de Gestão
+  Fiscal (*RGF*). Compartilha a mesma engine de alta performance do
+  `RREOdata`, permitindo a consulta multivariada de anos, entes
+  federativos, poderes e períodos de referência com consistência total
+  no formato dos dados.
 
-- `siconfi_list`: Opção padrão `NULL` retorna um `data.frame` contendo
-  os códigos do IBGE e do Siconfi disponíveis para a API, juntamente com
-  as instituições correspondentes. A escolha da opção `options = down`
-  permite o download do arquivo (.pdf) disponibilizado pelo Tesouro
-  Nacional.
+- `siconfi_list`: Ferramenta de gestão de metadados. A opção
+  `action = "view"` (padrão) carrega o dicionário de códigos do IBGE e
+  SICONFI diretamente da estrutura interna do pacote. A opção
+  `action = "download"` provê integração direta com o repositório do
+  Tesouro Nacional, baixando o catálogo oficial em PDF com gerenciamento
+  inteligente de caminhos de diretório (cross-platform).
 
 <!-- <br /> -->
+
+## Principais Funcionalidades
+
+*Extração Vetorizada*: Suporte a grades paramétricas complexas (produto
+cartesiano de entes, anos e períodos) em uma única chamada.
+
+*Gestão de Memória*: Arquitetura otimizada que utiliza pré-alocação e
+processamento eficiente para evitar estouros de RAM.
+
+*Persistência Direta*: Suporte nativo para exportação em formatos de
+alta performance como Parquet (via `arrow`), RDS e CSV.
+
+*UX Inteligente*: Interface CLI amigável com barra de progresso (ETA),
+tratamento de erros `fail-fast` e macros para extração em lote (ex:
+`all_states`, `all_muni`).
 
 ## Instalação
 
@@ -64,55 +92,44 @@ devtools::install_github("Natanaelsl/RREORGFdataR", build_vignettes = TRUE)
 
 <!-- --- -->
 
-## Exemplo
+## Exemplo de Uso
 
-Este é um exemplo básico que mostra como resolver um problema comum:
+Abaixo, um exemplo de como extrair dados em lote e salvar diretamente
+para um pipeline de Data Lake:
 
 ``` r
-## Carregando o pacote
 library(RREORGFdataR)
 
-## Download dos dados do Relatório Resumido da Execução Orçamentária (RREO).
-# RREOdata()
+# 1. Extração eficiente de dados do RGF (Estados, 2020-2023, 3º quadrimestre)
+dados_rgf <- RGFdata(
+  cod.ibge = 52,
+  year = 2020:2023,
+  power = c('E', 'L', 'J', 'D', 'M'),
+  period = 3,
+  annex = 1
+)
 
-## Extraindo dados do anexo 1 para o 3º quadrimestre do RGF de 2020 até 2023
-## do Estado de Goiás para todos os poderes.
-RGFdata(cod.ibge = 52,
-        year = 2020:2023,
-        power = c('E','L','J','D','M'),
-        period = 3,
-        annex = 1,
-        simplified = FALSE)
-        
-## Extraindo dados do anexo 1 para o 3º quadrimestre do RGF de 2023
-## de todos as UF's para todos os poderes.
-RGFdata(cod.ibge = "all_states",
-        year = 2023,
-        power = c('E','L','J','D','M'),
-        period = 3,
-        annex = 1,
-        simplified = FALSE)
+# 2. Pipeline de Data Lake: Extração massiva e persistência em Parquet
+RREOdata(
+  cod.ibge = "all_states",
+  year = 2024,
+  period = 1:6,
+  annex = 1,
+  save_path = "data/rreo_estados_2024.parquet"
+)
 ```
 
 <!-- --- -->
 
 ## Informações
 
-### API SICONFI
+### Sobre a API SICONFI
 
-O Tesouro Nacional disponibilizou a Application Programming Interface
-(API) de dados abertos para atender à demanda por dados brutos oriundos
-do Sistema de Informações Contábeis e Fiscais do Setor Público
-Brasileiro – Siconfi. Por meio dessa ferramenta, é possível ao usuário
-obter desde pequenas frações até grandes volumes de dados de todas as
-informações inseridas pelos entes subnacionais no Siconfi.
-
-### Vantagem
-
-A sintaxe da função `RREORGFdataR` opera com a mesma lógica
-independentemente da base de interesse, o que torna intuitivo o
-download/extração de qualquer conjunto de dados usando uma única linha
-de código.
+O SICONFI é a fonte oficial dos dados contábeis e fiscais do setor
+público brasileiro. Este pacote abstrai a complexidade da API REST,
+tratando automaticamente a tradução de colunas temporais (formatos
+`<MR-X>`) para objetos de data nativos do R, facilitando análises
+imediatas.
 
 ### Código das instituições
 
@@ -121,6 +138,3 @@ com a API, bem como a respectiva instituição. Disponível em:
 <https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf>
 
 <br />
-
-> ***NOTA:*** O referido pacote está em fase de construção podendo não
-> ter todas as informações disponíveis para utilização.

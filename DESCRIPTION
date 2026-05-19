@@ -1,6 +1,6 @@
 Package: RREORGFdataR
 Title: Extração intuitiva e fácil do RREO e RGF
-Version: 1.0.0.9000
+Version: 2.0.0.0
 Authors@R: c(
     person("Natanael", "Soares Leite", , "natanaelsoaresleite@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1845-7095")),
     person("Raphael", "Maciel de Lima", , "raphael@gmail.com", role = c("aut"))
@@ -9,14 +9,14 @@ Description: **RREORGFdataR** é um pacote R que permite aos usuários acessar f
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
 URL: https://natanaelsl.github.io/RREORGFdataR/, https://github.com/Natanaelsl/RREORGFdataR, https://natanaelsl.github.io/RREORGFdataR/
 BugReports: https://github.com/Natanaelsl/RREORGFdataR/issues
 Imports: 
     magrittr,
     cli,
     dplyr,
-    glue,
+    stringr,
+    tidyr,
     httr,
     jsonlite,
     utils,
@@ -24,6 +24,7 @@ Imports:
     lifecycle
 Suggests: 
     knitr,
+    arrow,
     ggplot2,
     rmarkdown,
     vctrs,
@@ -32,6 +33,7 @@ Suggests:
     RCurl,
     testthat (>= 3.0.0)
 Depends:
-  R (>= 3.5)
+  R (>= 4.1.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0

@@ -2,46 +2,89 @@
 % Please edit documentation in R/RREOdata.R
 \name{RREOdata}
 \alias{RREOdata}
-\title{RGFdata: Extração intuitiva e fácil dos dados do RREO}
+\title{Extração Inteligente e Vetorizada de Dados do RREO (SICONFI)}
 \usage{
 RREOdata(
   cod.ibge = NULL,
   year = NULL,
   period = NULL,
   annex = NULL,
-  simplified = FALSE
+  simplified = FALSE,
+  save_path = NULL
 )
 }
 \arguments{
-\item{cod.ibge}{Código IBGE do Ente. se \code{simplified = TRUE}, então selecione municípios.}
+\item{cod.ibge}{Vetor numérico ou caractere contendo os códigos IBGE dos entes federativos.
+Aceita códigos de 1 dígito (União), 2 dígitos (Estados) ou 7 dígitos (Municípios).
+Pode receber os atalhos estendidos \code{"all_states"} para extrair todas as Unidades da
+Federação de forma combinada ou \code{"all_muni"} para todos os municípios brasileiros.}
 
-\item{year}{Exercício do relatório}
+\item{year}{Vetor numérico contendo os anos/exercícios desejados para a análise (ex: \code{2022:2024}).}
 
-\item{period}{Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se \code{simplified = TRUE}.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.}
+\item{period}{Vetor numérico contendo os bimestres de referência do relatório dentro de um exercício.
+Valores típicos disponíveis: \code{1} a \code{6}. Caso \code{simplified = TRUE}, a periodicidade passa a
+ser semestral, aceitando os valores \code{1} ou \code{2}.}
 
-\item{annex}{Anexos dos demonstrativos do RREO. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.}
+\item{annex}{Vetor numérico mapeando os anexos dos demonstrativos do RREO a serem baixados
+(valores aceitos de \code{1} a \code{14} conforme disponibilidade na API do SICONFI).}
 
-\item{simplified}{Tipo do Demonstrativo. RREO Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se \code{TRUE} a periodicidade semestral será automaticamente selecionada.}
+\item{simplified}{Lógico. Define se a consulta deve buscar a versão do RREO Simplificado.
+Esta opção aplica-se estritamente a municípios com menos de 50 mil habitantes que optaram
+formalmente pela publicação semestral dos seus relatórios fiscais. Padrão é \code{FALSE}.}
+
+\item{save_path}{Caminho de arquivo opcional em disco (caractere) para persistência imediata
+dos dados consolidados. Se a extensão informada for \code{.parquet}, o pacote exige a instalação
+do pacote \code{arrow}. Também aceita extensões \code{.rds} e \code{.csv}. Se omitido (\code{NULL}), os dados
+são retornados diretamente para a sessão do R.}
+}
+\value{
+Um objeto \code{data.frame} (ou um objeto invisível caso \code{save_path} seja acionado) contendo
+as colunas padronizadas da API do SICONFI empilhadas verticalmente de forma limpa, com as
+colunas do tipo \verb{<MR-X>} devidamente traduzidas para o formato de data real \code{mes/ano}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-Realiza a extração dos dados do Relatório Resumido de Execução Orçamentária (RREO) de maneira mais intuitiva e fácil utilizando a API do \href{https://apidatalake.tesouro.gov.br/docs/siconfi/}{SICONFI}.
+Realiza a extração automatizada e em lote dos dados do Relatório Resumido de
+Execução Orçamentária (RREO) Diretamente da API do SICONFI (Tesouro Nacional).
+A função resolve nativamente grades paramétricas complexas (produto cartesiano),
+otimiza o consumo de memória RAM e processa de forma determinística as colunas
+temporais móveis (como os últimos 12 meses do Anexo 03).
 }
 \examples{
-# install.packages("devtools")
-# devtools::install_github("Natanaelsl/RREORGFdataR")
+\dontrun{
+# 1. Extração básica: Anexo 01 do Estado de Goiás (IBGE 52) para o 6º Bimestre de 2023
+dados_goias <- RREOdata(
+  cod.ibge = 52,
+  year = 2023,
+  period = 6,
+  annex = 1
+)
 
-# Carregando o pacote
-library(RREORGFdataR)
+# 2. Extração combinada multivariada (Gera produto cartesiano interno)
+# Baixa dados de Goiânia (5208707) e Aparecida (5201405), anos 2022 e 2023, bimestres 1 e 6
+dados_multi <- RREOdata(
+  cod.ibge = c(5208707, 5201405),
+  year = 2022:2023,
+  period = c(1, 6),
+  annex = 3
+)
 
-# Extraindo dados do anexo 1, 6º bimestre
-# do RREO de 2023 do Estado de Goiás.
-RREOdata(cod.ibge = 52,
-         year = 2023,
-         period = 6,
-         annex = 1,
-         simplified = FALSE) \%>\%
-         head(., n = 5)
+# 3. Pipeline de Data Lake: Baixando dados em lote e salvando direto em Parquet
+# Nota: Requer que o pacote 'arrow' esteja instalado no ambiente.
+RREOdata(
+  cod.ibge = "all_states",
+  year = 2024,
+  period = 1:6,
+  annex = 1,
+  save_path = "data/storage/rreo_estados_2024.parquet"
+)
 
+# 4. Fluxo de leitura local após salvar (Lazy Loading)
+# gc() # Chama o garbage collector para limpar a RAM
+# tab.parquet <- arrow::open_dataset("data/storage/rreo_estados_2024.parquet")
+# tab.parquet |>
+#  filter(id_ente == "52") |>
+#  collect()
+}
 }

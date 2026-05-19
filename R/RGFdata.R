@@ -1,550 +1,183 @@
-#' RGFdata: Extração intuitiva e fácil dos dados do RGF
+#' Extração Inteligente e Vetorizada de Dados do RGF (SICONFI)
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' Realiza a extração automatizada e em lote dos dados do Relatório de Gestão Fiscal (RGF)
+#' diretamente da API do SICONFI (Tesouro Nacional). A função resolve nativamente grades
+#' paramétricas complexas (produto cartesiano de anos, entes, poderes e períodos), otimiza o
+#' consumo de memória RAM e processa de forma determinística as colunas temporais móveis
+#' (como a apuração de meses de referência no Anexo 01).
 #'
-#' Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do [SICONFI](https://apidatalake.tesouro.gov.br/docs/siconfi/).
+#' @param cod.ibge Código IBGE do Ente. Vetor numérico ou caractere contendo os códigos dos entes.
+#'   Aceita códigos de 1 dígito (União), 2 dígitos (Estados) ou 7 dígitos (Municípios).
+#'   Para obter todas as UF's de forma combinada utilize o atalho `"all_states"`. Para obter todos
+#'   os municípios utilize `"all_muni"`. Se `simplified = TRUE`, selecione municípios compatíveis.
+#' @param year Exercício do relatório. Vetor numérico contendo os anos desejados para a análise (ex: `2022:2024`).
+#' @param power Código do poder. Vetor de caracteres indicando os poderes pretendidos.
+#'   Valores disponíveis: `E` = Executivo, `L` = Legislativo, `J` = Judiciário, `M` = Ministério Público, `D` = Defensoria Pública.
+#' @param period Quadrimestre ou semestre de referência do relatório dentro de um exercício.
+#'   A periodicidade semestral é automaticamente selecionada se `simplified = TRUE` (valores aceitos: 1 ou 2).
+#'   A periodicidade padrão do relatório é quadrimestral (valores aceitos: 1, 2 ou 3).
+#' @param annex Anexos dos demonstrativos do RGF. Valores disponíveis: `1`, `2`, `3`, `4`, `5` ou `6`.
+#' @param simplified Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos
+#'   de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se `TRUE`, a periodicidade
+#'   semestral será automaticamente assumida e o período 3 passará a ser inválido. Padrão é `FALSE`.
+#' @param save_path Caminho de arquivo opcional em disco (caractere) para persistência imediata dos dados.
+#'   Se a extensão informada for `.parquet`, o pacote exige a instalação do pacote `arrow`. Também aceita
+#'   extensões `.rds` e `.csv`. Se omitido (`NULL`), os dados são retornados diretamente para a sessão do R.
 #'
-#' @param cod.ibge Código IBGE do Ente. se `simplified = TRUE`, então selecione municípios. Para obter todas as UF's utilize "all_states". Para obter todos os municípios utilize "all_muni".
-#' @param year Exercício do relatório
-#' @param power Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública
-#' @param period Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se `simplified = TRUE`.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.
-#' @param annex Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.
-#' @param simplified Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se `TRUE` a periodicidade semestral será automaticamente selecionada.
-#'
+#' @return Um objeto `data.frame` (ou um objeto invisível caso `save_path` seja acionado) contendo
+#'   as colunas padronizadas da API do SICONFI empilhadas verticalmente de forma limpa, com as colunas
+#'   do tipo `<MR-X>` devidamente traduzidas para o formato de data real `mes/ano`.
 #'
 #' @export
+#'
 #' @examples
-#' # install.packages("devtools")
-#' # devtools::install_github("Natanaelsl/RREORGFdataR")
+#' \dontrun{
+#' # 1. Extração básica: Anexo 01 de Goiás (IBGE 52) para o 3º quadrimestre de 2023, todos os poderes
+#' dados_rgf_go <- RGFdata(
+#'   cod.ibge = 52,
+#'   year = 2023,
+#'   power = c("E", "L", "J", "D", "M"),
+#'   period = 3,
+#'   annex = 1,
+#'   simplified = FALSE
+#' )
 #'
-#' # Carregando o pacote
-#' library(RREORGFdataR)
+#' # 2. Extração combinada multivariada em lote
+#' # Baixa dados do Executivo e Legislativo para os anos 2022 e 2023 em múltiplos quadrimestres
+#' dados_rgf_multi <- RGFdata(
+#'   cod.ibge = c(5208707, 5201405),
+#'   year = 2022:2023,
+#'   power = c("E", "L"),
+#'   period = c(1, 2),
+#'   annex = 1
+#' )
 #'
-#' # Extraindo dados do anexo 1 para o 3º quadrimestre
-#' # do RGF de 2023 do Estado de Goiás para todos os poderes.
-#' RGFdata(cod.ibge = 52,
-#'         year = 2023,
-#'         power = c('E','L','J','D','M'),
-#'         period = 3,
-#'         annex = 1,
-#'         simplified = FALSE) %>%
-#'         head(., n = 5)
-#'
-RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, annex = NULL, simplified = FALSE){
+#' # 3. Ingestão para Data Lake local salvando diretamente em formato Parquet
+#' RGFdata(
+#'   cod.ibge = "all_states",
+#'   year = 2024,
+#'   power = "E",
+#'   period = 1:3,
+#'   annex = 2,
+#'   save_path = "data/storage/rgf_executivo_estados_2024.parquet"
+#' )
+#' }
+RGFdata <- function(cod.ibge = NULL, year = NULL, power = NULL, period = NULL, annex = NULL, simplified = FALSE, save_path = NULL) {
 
-
-  base_url_rgf <- "https://apidatalake.tesouro.gov.br/ords/siconfi/tt/rgf?"
-
-  rgf_df <- data.frame(stringsAsFactors = FALSE)
-
-
-  # DEFININDO SELEÇÃO DE TODOS OS ESTADOS
-  if(cod.ibge == "all_states") {
-    cod_ibge <- siconfi_list() %>% janitor::clean_names() %>% dplyr::filter(nchar(codigo_ibge) == 2) %>% dplyr::distinct(codigo_ibge) %>% dplyr::arrange(codigo_ibge) %>% dplyr::pull() %>% base::as.numeric()
-  }
-  #DEFININDO SELEÇÃO DE TODOS OS MUNICÍPIOS
-  else if (cod.ibge == "all_muni") {
-    cod_ibge <- siconfi_list() %>% janitor::clean_names() %>% dplyr::filter(nchar(codigo_ibge) == 7) %>% dplyr::distinct(codigo_ibge) %>% dplyr::arrange(codigo_ibge) %>% dplyr::pull() %>% base::as.numeric()
-  }
-  else {
-    cod_ibge <- cod.ibge
-  }
-
-
-  # MENSAGENS DE ERRO
-  if(all(nchar(cod_ibge) == 1) & isTRUE(simplified) ) {
-    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
+  # 1. Tratamento de Atalhamento em Lote (Macros)
+  if (length(cod.ibge) == 1 && cod.ibge == "all_states") {
+    cod_ibge <- siconfi_list() |>
+      janitor::clean_names() |>
+      dplyr::filter(stringr::str_length(as.character(codigo_ibge)) == 2) |>
+      dplyr::pull(codigo_ibge) |>
+      as.numeric()
+  } else if (length(cod.ibge) == 1 && cod.ibge == "all_muni") {
+    cod_ibge <- siconfi_list() |>
+      janitor::clean_names() |>
+      dplyr::filter(stringr::str_length(as.character(codigo_ibge)) == 7) |>
+      dplyr::pull(codigo_ibge) |>
+      as.numeric()
+  } else {
+    cod_ibge <- as.character(cod.ibge)
   }
 
-  if(all(nchar(cod_ibge) == 2) & isTRUE(simplified) ) {
-    cli::cli_alert_danger("The simplified publication only applies to municipalities with less than 50 thousand inhabitants. Not compatible with the `cod.ibge` provided. Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
+  chars_ibge <- stringr::str_length(cod_ibge)
+
+  # 2. Cláusulas de Proteção de Escopo (Fail-Fast)
+  if (any(chars_ibge %in% c(1, 2)) && isTRUE(simplified)) {
+    cli::cli_abort(c(
+      "x" = "The simplified publication only applies to municipalities with less than 50 thousand inhabitants.",
+      "i" = "Not compatible with the `cod.ibge` provided (Union or State level entity detected).",
+      "*" = "Run {.run RREORGFdataR::siconfi_list()} to see the list of valid municipalities."
+    ))
+  }
+  if (any(chars_ibge == 7) && isTRUE(simplified) && (3 %in% period)) {
+    cli::cli_abort(c(
+      "x" = "Simplified RGF applies only to municipalities that have opted for biannual publication.",
+      "i" = "Period 3 is invalid for simplified reports.",
+      "*" = "Set `period` to 1 or 2."
+    ))
   }
 
-  if(all(nchar(cod_ibge) == 7) & isTRUE(simplified) & (3 %in% period)) {
-    cli::cli_alert_danger("Simplified RGF applies only to municipalities with less than 50 thousand inhabitants that have opted for biannual publication of reports. Set `periodo` to 1 or 2.")
+  # 3. Construção da Malha Paramétrica Combinada (Grid)
+  param_grid <- tidyr::expand_grid(
+    ano = year,
+    periodo = period,
+    poder = power,
+    anexo = annex,
+    ibge = cod_ibge
+  )
+  total_req <- nrow(param_grid)
+
+  # 4. Interface Visual do Usuário (UX/CLI)
+  cli::cli_h1("SICONFI Extraction: RGF")
+  cli::cli_alert_info("Starting data extraction for {total_req} configuration{?s}...")
+
+  pb <- cli::cli_progress_bar(
+    format = "{cli::pb_spin} [{cli::pb_current}/{cli::pb_total}] Target Year: {.val {ano}} | IBGE: {.val {ibge}} | Power: {.val {poder}} | {cli::pb_percent} | ETA: {cli::pb_eta}",
+    total = total_req,
+    clear = FALSE
+  )
+
+  # 5. Pipeline Iterativo Alocado (Prevenção O(n^2))
+  resultados <- vector("list", total_req)
+
+  for (i in seq_len(total_req)) {
+    p <- param_grid[i, ]
+    ano <- p$ano; ibge <- p$ibge; poder <- p$poder # Escopo léxico lido pelo format do cli_progress_bar
+
+    resultados[[i]] <- .fetch_siconfi_api(
+      ano = ano, periodo = p$periodo, anexo = p$anexo,
+      ibge = ibge, relatorio = "RGF", simplificado = simplified, poder = poder
+    )
+
+    cli::cli_progress_update(id = pb)
+    Sys.sleep(0.3) # Intervalo de segurança contra rate-limits restritivos da API
   }
 
-  # DEFININDO ESTRUTURA PARA UNIÃO
-  if(all(nchar(cod_ibge) == 1) & (simplified == FALSE) | is.null(simplified) ) {
+  cli::cli_progress_done(id = pb)
 
-    for(z in 1:length(year)) {
-      cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
+  # 6. Consolidação Estrutural
+  final_df <- dplyr::bind_rows(resultados)
 
+  if (nrow(final_df) == 0) {
+    cli::cli_alert_warning("No data was returned. Please verify parameters or API availability status.")
+    return(final_df)
+  } else {
+    cli::cli_alert_success("Extraction finished! {.val {nrow(final_df)}} database records obtained.")
+  }
 
-      step0 <- " "
-      cli::cli_progress_step("cod. IBGE | {step0}", spinner = TRUE, msg_done = "Finished!")
-      for (j in 1:length(cod_ibge)) {
-        Sys.sleep(1)
-        step0 <- glue::glue("{cod_ibge[[j]]}")
-        cli::cli_progress_update(set = j)
+  # 7. Engine Opcional de Persistência em Disco (Parquet / RDS / CSV)
+  if (!is.null(save_path)) {
+    ext <- tolower(tools::file_ext(save_path))
+    cli::cli_progress_step("Writing file to storage using format: {.val {ext}}...")
 
-
-        for (i in 1:length(power)) {
-
-
-          for (w in 1:length(period)) {
-            Sys.sleep(1)
-
-            exercicio <- year[[z]]
-            periodicidade = "Q"
-            tempo <- period[[w]]
-            tipo_relatorio <- "RGF"
-            num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
-            esfera <- "U"
-            cod_poder <- power[[i]]
-            ente <- cod_ibge[[j]]
-
-            # montar a chamada à API
-            chamada_api_rgf <- paste(base_url_rgf,
-                                     "an_exercicio=", exercicio, "&",
-                                     "in_periodicidade=", periodicidade,"&",
-                                     "nr_periodo=", tempo, "&",
-                                     "co_tipo_demonstrativo=", tipo_relatorio, "&",
-                                     "no_anexo=", num_anexo, "&",
-                                     "co_esfera=", esfera , "&",
-                                     "co_poder=", cod_poder, "&",
-                                     "id_ente=", ente, sep = ""
-            )
-
-
-            rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
-
-            httr::status_code(rgf)
-
-            rgf_txt <- httr::content(rgf, as="text", encoding="UTF-8")
-
-            rgf_json <- jsonlite::fromJSON(rgf_txt, flatten = FALSE)
-
-            rgf_df1 <- as.data.frame(rgf_json[["items"]])
-
-            rgf_df <-  rbind(rgf_df, rgf_df1)
-
-          }
-        }
+    if (ext == "parquet") {
+      if (!requireNamespace("arrow", quietly = TRUE)) {
+        cli::cli_abort(c(
+          "x" = "The {.pkg arrow} package is strictly required to read and write Parquet files.",
+          "i" = "Please execute {.run install.packages('arrow')} and restart your R session."
+        ))
       }
-    }
+      arrow::write_parquet(final_df, save_path)
 
-    if({{num_anexo}} == "RGF-Anexo%2001"){
-      rgf_df0 <- rgf_df %>%
-        dplyr::mutate(mes_nome = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-11>'~ glue::glue('set/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-11>'~ glue::glue('mai/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-10>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-10>'~ glue::glue('out/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-10>'~ glue::glue('jun/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-9>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-9>'~ glue::glue('nov/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-9>'~ glue::glue('jul/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-8>'~ glue::glue('abr/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-8>'~ glue::glue('dez/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-8>'~ glue::glue('ago/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-7>'~ glue::glue('mai/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-7>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-7>'~ glue::glue('set/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-6>'~ glue::glue('jun/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-6>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-6>'~ glue::glue('out/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-5>'~ glue::glue('jul/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-5>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-5>'~ glue::glue('nov/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-4>'~ glue::glue('ago/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-4>'~ glue::glue('abr/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-4>'~ glue::glue('dez/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-3>'~ glue::glue('set/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-3>'~ glue::glue('mai/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-3>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR-2>'~ glue::glue('out/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-2>'~ glue::glue('jun/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-2>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR-1>'~ glue::glue('nov/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-1>'~ glue::glue('jul/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-1>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR>'~ glue::glue('dez/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR>'~ glue::glue('ago/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR>'~ glue::glue('abr/{exercicio}'),
-                                                  TRUE ~ coluna),
-                      mes = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~1,
-                                             periodo == 2 & coluna == '<MR-11>'~9,
-                                             periodo == 1 & coluna == '<MR-11>'~5,
-                                             periodo == 3 & coluna == '<MR-10>'~2,
-                                             periodo == 2 & coluna == '<MR-10>'~10,
-                                             periodo == 1 & coluna == '<MR-10>'~6,
-                                             periodo == 3 & coluna == '<MR-9>'~3,
-                                             periodo == 2 & coluna == '<MR-9>'~11,
-                                             periodo == 1 & coluna == '<MR-9>'~7,
-                                             periodo == 3 & coluna == '<MR-8>'~4,
-                                             periodo == 2 & coluna == '<MR-8>'~12,
-                                             periodo == 1 & coluna == '<MR-8>'~8,
-                                             periodo == 3 & coluna == '<MR-7>'~5,
-                                             periodo == 2 & coluna == '<MR-7>'~1,
-                                             periodo == 1 & coluna == '<MR-7>'~9,
-                                             periodo == 3 & coluna == '<MR-6>'~6,
-                                             periodo == 2 & coluna == '<MR-6>'~2,
-                                             periodo == 1 & coluna == '<MR-6>'~10,
-                                             periodo == 3 & coluna == '<MR-5>'~7,
-                                             periodo == 2 & coluna == '<MR-5>'~3,
-                                             periodo == 1 & coluna == '<MR-5>'~11,
-                                             periodo == 3 & coluna == '<MR-4>'~8,
-                                             periodo == 2 & coluna == '<MR-4>'~4,
-                                             periodo == 1 & coluna == '<MR-4>'~12,
-                                             periodo == 3 & coluna == '<MR-3>'~9,
-                                             periodo == 2 & coluna == '<MR-3>'~5,
-                                             periodo == 1 & coluna == '<MR-3>'~1,
-                                             periodo == 3 & coluna == '<MR-2>'~10,
-                                             periodo == 2 & coluna == '<MR-2>'~6,
-                                             periodo == 1 & coluna == '<MR-2>'~2,
-                                             periodo == 3 & coluna == '<MR-1>'~11,
-                                             periodo == 2 & coluna == '<MR-1>'~7,
-                                             periodo == 1 & coluna == '<MR-1>'~3,
-                                             periodo == 3 & coluna == '<MR>'~12,
-                                             periodo == 2 & coluna == '<MR>'~8,
-                                             periodo == 1 & coluna == '<MR>'~4),
-                      valor = as.numeric(rgf_df$valor)
-        )
+    } else if (ext == "rds") {
+      saveRDS(final_df, save_path)
 
-      # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
-      # rm(rgf_df0)
-      return(rgf_df0)
+    } else if (ext == "csv") {
+      utils::write.csv(final_df, save_path, row.names = FALSE, fileEncoding = "UTF-8")
 
     } else {
-
-      rgf_df0 <- rgf_df
-      # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
-      # rm(rgf_df0)
-      return(rgf_df0)
-
+      cli::cli_alert_warning("File extension format {.val {ext}} is not supported. Data returned strictly in-memory.")
+      return(final_df)
     }
 
-    cli::cli_progress_done()
-
+    cli::cli_alert_success("File successfully persisted at path: {.path {save_path}}")
+    return(invisible(final_df))
   }
 
-  # DEFININDO ESTRUTURA PARA ESTADOS
-  if(all(nchar(cod_ibge) == 2) & (simplified == FALSE) | is.null(simplified) ) {
-
-    for(z in 1:length(year)) {
-      cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
-
-
-      step1 <- " "
-      cli::cli_progress_step("cod. IBGE | {step1}", spinner = TRUE, msg_done = "Finished!")
-      for (j in 1:length(cod_ibge)) {
-        Sys.sleep(1)
-        step1 <- glue::glue("{cod_ibge[[j]]}")
-        cli::cli_progress_update(set = j)
-
-
-        for (i in 1:length(power)) {
-
-
-          for (w in 1:length(period)) {
-            Sys.sleep(1)
-
-            exercicio <- year[[z]]
-            periodicidade = "Q"
-            tempo <- period[[w]]
-            tipo_relatorio <- "RGF"
-            num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
-            esfera <- "E"
-            cod_poder <- power[[i]]
-            ente <- cod_ibge[[j]]
-
-            # montar a chamada à API
-            chamada_api_rgf <- paste(base_url_rgf,
-                                     "an_exercicio=", exercicio, "&",
-                                     "in_periodicidade=", periodicidade,"&",
-                                     "nr_periodo=", tempo, "&",
-                                     "co_tipo_demonstrativo=", tipo_relatorio, "&",
-                                     "no_anexo=", num_anexo, "&",
-                                     "co_esfera=", esfera , "&",
-                                     "co_poder=", cod_poder, "&",
-                                     "id_ente=", ente, sep = ""
-            )
-
-
-
-            rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
-
-            httr::status_code(rgf)
-
-            rgf_txt <- httr::content(rgf, as="text", encoding="UTF-8")
-
-            rgf_json <- jsonlite::fromJSON(rgf_txt, flatten = FALSE)
-
-            rgf_df1 <- as.data.frame(rgf_json[["items"]])
-
-            rgf_df <-  rbind(rgf_df, rgf_df1)
-
-          }
-        }
-      }
-    }
-
-    if({{num_anexo}} == "RGF-Anexo%2001"){
-      rgf_df0 <- rgf_df %>%
-        dplyr::mutate(mes_nome = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-11>'~ glue::glue('set/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-11>'~ glue::glue('mai/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-10>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-10>'~ glue::glue('out/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-10>'~ glue::glue('jun/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-9>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-9>'~ glue::glue('nov/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-9>'~ glue::glue('jul/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-8>'~ glue::glue('abr/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-8>'~ glue::glue('dez/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-8>'~ glue::glue('ago/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-7>'~ glue::glue('mai/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-7>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-7>'~ glue::glue('set/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-6>'~ glue::glue('jun/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-6>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-6>'~ glue::glue('out/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-5>'~ glue::glue('jul/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-5>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-5>'~ glue::glue('nov/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-4>'~ glue::glue('ago/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-4>'~ glue::glue('abr/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-4>'~ glue::glue('dez/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-3>'~ glue::glue('set/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-3>'~ glue::glue('mai/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-3>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR-2>'~ glue::glue('out/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-2>'~ glue::glue('jun/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-2>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR-1>'~ glue::glue('nov/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-1>'~ glue::glue('jul/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-1>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR>'~ glue::glue('dez/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR>'~ glue::glue('ago/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR>'~ glue::glue('abr/{exercicio}'),
-                                                  TRUE ~ coluna),
-                      mes = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~1,
-                                             periodo == 2 & coluna == '<MR-11>'~9,
-                                             periodo == 1 & coluna == '<MR-11>'~5,
-                                             periodo == 3 & coluna == '<MR-10>'~2,
-                                             periodo == 2 & coluna == '<MR-10>'~10,
-                                             periodo == 1 & coluna == '<MR-10>'~6,
-                                             periodo == 3 & coluna == '<MR-9>'~3,
-                                             periodo == 2 & coluna == '<MR-9>'~11,
-                                             periodo == 1 & coluna == '<MR-9>'~7,
-                                             periodo == 3 & coluna == '<MR-8>'~4,
-                                             periodo == 2 & coluna == '<MR-8>'~12,
-                                             periodo == 1 & coluna == '<MR-8>'~8,
-                                             periodo == 3 & coluna == '<MR-7>'~5,
-                                             periodo == 2 & coluna == '<MR-7>'~1,
-                                             periodo == 1 & coluna == '<MR-7>'~9,
-                                             periodo == 3 & coluna == '<MR-6>'~6,
-                                             periodo == 2 & coluna == '<MR-6>'~2,
-                                             periodo == 1 & coluna == '<MR-6>'~10,
-                                             periodo == 3 & coluna == '<MR-5>'~7,
-                                             periodo == 2 & coluna == '<MR-5>'~3,
-                                             periodo == 1 & coluna == '<MR-5>'~11,
-                                             periodo == 3 & coluna == '<MR-4>'~8,
-                                             periodo == 2 & coluna == '<MR-4>'~4,
-                                             periodo == 1 & coluna == '<MR-4>'~12,
-                                             periodo == 3 & coluna == '<MR-3>'~9,
-                                             periodo == 2 & coluna == '<MR-3>'~5,
-                                             periodo == 1 & coluna == '<MR-3>'~1,
-                                             periodo == 3 & coluna == '<MR-2>'~10,
-                                             periodo == 2 & coluna == '<MR-2>'~6,
-                                             periodo == 1 & coluna == '<MR-2>'~2,
-                                             periodo == 3 & coluna == '<MR-1>'~11,
-                                             periodo == 2 & coluna == '<MR-1>'~7,
-                                             periodo == 1 & coluna == '<MR-1>'~3,
-                                             periodo == 3 & coluna == '<MR>'~12,
-                                             periodo == 2 & coluna == '<MR>'~8,
-                                             periodo == 1 & coluna == '<MR>'~4),
-                      valor = as.numeric(rgf_df$valor)
-        )
-
-      # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
-      # rm(rgf_df0)
-      return(rgf_df0)
-
-    } else {
-
-      rgf_df0 <- rgf_df
-      # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
-      # rm(rgf_df0)
-      return(rgf_df0)
-
-    }
-
-    cli::cli_progress_done()
-
-  }
-
-  # DEFININDO ESTRUTURA PARA MUNICÍPIOS
-  if((all(nchar(cod_ibge) == 7)) & ((isTRUE(simplified) & !(3 %in% period)) | is.null(simplified) | simplified == FALSE) ) {
-
-
-      for(z in 1:length(year)) {
-        cli::cli_progress_step("EXTRACTING {year[[z]]}", spinner = TRUE)
-
-
-        step2 <- " "
-        cli::cli_progress_step("cod. IBGE | {step2}", spinner = TRUE, msg_done = "Finished!")
-        for (j in 1:length(cod_ibge)) {
-          Sys.sleep(1)
-          step2 <- glue::glue("{cod_ibge[[j]]}")
-          cli::cli_progress_update(set = j)
-
-
-          for (i in 1:length(power)) {
-
-
-            for (w in 1:length(period)) {
-              Sys.sleep(1)
-
-              exercicio <- year[[z]]
-              tempo <- period[[w]]
-
-              if({simplified} == TRUE) {
-                tipo_relatorio <- "RGF+Simplificado"
-                periodicidade = "S"
-              } else {
-                tipo_relatorio <- "RGF"
-                periodicidade = "Q"
-              }
-              num_anexo <- glue::glue("RGF-Anexo%200",{{annex}})
-              esfera <- "M"
-              cod_poder <- power[[i]]
-              ente <- cod_ibge[[j]]
-
-              # montar a chamada à API
-              chamada_api_rgf <- paste(base_url_rgf,
-                                       "an_exercicio=", exercicio, "&",
-                                       "in_periodicidade=", periodicidade,"&",
-                                       "nr_periodo=", tempo, "&",
-                                       "co_tipo_demonstrativo=", tipo_relatorio, "&",
-                                       "no_anexo=", num_anexo, "&",
-                                       "co_esfera=", esfera , "&",
-                                       "co_poder=", cod_poder, "&",
-                                       "id_ente=", ente, sep = "")
-
-
-
-              rgf <- httr::GET(chamada_api_rgf, config = httr::config(connecttimeout = 60))
-
-              httr::status_code(rgf)
-
-              rgf_txt <- httr::content(rgf, as="text", encoding="UTF-8")
-
-              rgf_json <- jsonlite::fromJSON(rgf_txt, flatten = FALSE)
-
-              rgf_df1 <- as.data.frame(rgf_json[["items"]])
-
-              rgf_df <-  rbind(rgf_df, rgf_df1)
-
-            }
-          }
-        }
-      }
-
-
-
-    if({{num_anexo}} == "RGF-Anexo%2001" & simplified != TRUE) {
-      rgf_df0 <- rgf_df %>%
-        dplyr::mutate(mes_nome = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-11>'~ glue::glue('set/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-11>'~ glue::glue('mai/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-10>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-10>'~ glue::glue('out/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-10>'~ glue::glue('jun/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-9>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-9>'~ glue::glue('nov/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-9>'~ glue::glue('jul/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-8>'~ glue::glue('abr/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-8>'~ glue::glue('dez/{exercicio - 1}'),
-                                                  periodo == 1 & coluna == '<MR-8>'~ glue::glue('ago/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-7>'~ glue::glue('mai/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-7>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-7>'~ glue::glue('set/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-6>'~ glue::glue('jun/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-6>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-6>'~ glue::glue('out/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-5>'~ glue::glue('jul/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-5>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-5>'~ glue::glue('nov/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-4>'~ glue::glue('ago/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-4>'~ glue::glue('abr/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-4>'~ glue::glue('dez/{exercicio - 1}'),
-                                                  periodo == 3 & coluna == '<MR-3>'~ glue::glue('set/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-3>'~ glue::glue('mai/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-3>'~ glue::glue('jan/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR-2>'~ glue::glue('out/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-2>'~ glue::glue('jun/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-2>'~ glue::glue('fev/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR-1>'~ glue::glue('nov/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR-1>'~ glue::glue('jul/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR-1>'~ glue::glue('mar/{exercicio}'),
-                                                  periodo == 3 & coluna == '<MR>'~ glue::glue('dez/{exercicio}'),
-                                                  periodo == 2 & coluna == '<MR>'~ glue::glue('ago/{exercicio}'),
-                                                  periodo == 1 & coluna == '<MR>'~ glue::glue('abr/{exercicio}'),
-                                                  TRUE ~ coluna),
-                      mes = dplyr::case_when(periodo == 3 & coluna == '<MR-11>'~1,
-                                             periodo == 2 & coluna == '<MR-11>'~9,
-                                             periodo == 1 & coluna == '<MR-11>'~5,
-                                             periodo == 3 & coluna == '<MR-10>'~2,
-                                             periodo == 2 & coluna == '<MR-10>'~10,
-                                             periodo == 1 & coluna == '<MR-10>'~6,
-                                             periodo == 3 & coluna == '<MR-9>'~3,
-                                             periodo == 2 & coluna == '<MR-9>'~11,
-                                             periodo == 1 & coluna == '<MR-9>'~7,
-                                             periodo == 3 & coluna == '<MR-8>'~4,
-                                             periodo == 2 & coluna == '<MR-8>'~12,
-                                             periodo == 1 & coluna == '<MR-8>'~8,
-                                             periodo == 3 & coluna == '<MR-7>'~5,
-                                             periodo == 2 & coluna == '<MR-7>'~1,
-                                             periodo == 1 & coluna == '<MR-7>'~9,
-                                             periodo == 3 & coluna == '<MR-6>'~6,
-                                             periodo == 2 & coluna == '<MR-6>'~2,
-                                             periodo == 1 & coluna == '<MR-6>'~10,
-                                             periodo == 3 & coluna == '<MR-5>'~7,
-                                             periodo == 2 & coluna == '<MR-5>'~3,
-                                             periodo == 1 & coluna == '<MR-5>'~11,
-                                             periodo == 3 & coluna == '<MR-4>'~8,
-                                             periodo == 2 & coluna == '<MR-4>'~4,
-                                             periodo == 1 & coluna == '<MR-4>'~12,
-                                             periodo == 3 & coluna == '<MR-3>'~9,
-                                             periodo == 2 & coluna == '<MR-3>'~5,
-                                             periodo == 1 & coluna == '<MR-3>'~1,
-                                             periodo == 3 & coluna == '<MR-2>'~10,
-                                             periodo == 2 & coluna == '<MR-2>'~6,
-                                             periodo == 1 & coluna == '<MR-2>'~2,
-                                             periodo == 3 & coluna == '<MR-1>'~11,
-                                             periodo == 2 & coluna == '<MR-1>'~7,
-                                             periodo == 1 & coluna == '<MR-1>'~3,
-                                             periodo == 3 & coluna == '<MR>'~12,
-                                             periodo == 2 & coluna == '<MR>'~8,
-                                             periodo == 1 & coluna == '<MR>'~4),
-                      valor = as.numeric(rgf_df$valor)
-        )
-
-      # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
-      # rm(rgf_df0)
-      return(rgf_df0)
-
-    } else {
-
-      rgf_df0 <- rgf_df
-      # assign(glue::glue('RGF-Anexo_0{anexo}'), rgf_df0, envir=.GlobalEnv)
-      # rm(rgf_df0)
-      if(isTRUE(simplified) & ncol(rgf_df0) == 0) {
-        cli::cli_alert_warning("Check the parameters! Change `Simplified` to FALSE \n Run {.run RREORGFdataR::siconfi_list()} to see list of municipalities.")
-      } else {
-        return(rgf_df0)
-      }
-
-    }
-
-    cli::cli_progress_done()
-
-  }
-
-  # ADICIONAR AJUSTE DE DATA.FRAME AQUI!!!!!!!!
-
+  return(final_df)
 }

@@ -1,90 +1,83 @@
-#' siconfi_list: Lista de instituições e respectivos códigos
+#' Extração da Lista de Instituições e Códigos SICONFI
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
 #'
+#' Retorna o dicionário de dados contendo os códigos do IBGE e do SICONFI das
+#' instituições federativas compatíveis com a API do Tesouro Nacional. Permite
+#' visualizar a base empacotada em formato `data.frame` ou realizar o download
+#' do arquivo oficial em PDF diretamente do site do Tesouro.
 #'
-#' Retorna informações sobre os códigos do IBGE e do Siconfi e as respectivas instituições compatíveis com a API do SICONFI.
+#' @param action Caractere definindo a ação da função. Aceita `"view"` (padrão) para
+#'   carregar e retornar o `data.frame` contendo a base de dados interna do pacote,
+#'   ou `"download"` para baixar o arquivo PDF oficial do Tesouro Nacional.
+#' @param dest_dir Caminho de diretório (caractere) indicando onde o arquivo PDF
+#'   deve ser salvo caso `action = "download"`. O padrão é o diretório de trabalho
+#'   atual (`getwd()`). Ignorado se `action = "view"`.
 #'
-#' @param options A opção padrão `NULL` retorna um `data.frame` contendo os códigos do IBGE e do Siconfi disponíveis para a API, juntamente com as instituições correspondentes. A escolha da opção `options = down` permite o download do arquivo (.pdf) disponibilizado pelo Tesouro Nacional.
+#' @return Se `action = "view"`, retorna um objeto `data.frame` com os códigos.
+#'   Se `action = "download"`, salva o arquivo `.pdf` no diretório especificado e
+#'   retorna o caminho completo do arquivo invisivelmente (`invisible()`).
 #'
 #' @export
+#'
 #' @examples
-#' # install.packages("devtools")
-#' devtools::install_github("Natanaelsl/RREORGFdataR")
+#' \dontrun{
+#' # 1. Visualizar o dicionário de códigos no console (retorna o data.frame)
+#' df_codigos <- siconfi_list(action = "view")
+#' head(df_codigos)
 #'
-#' # Carregando o pacote
-#' library(RREORGFdataR)
+#' # 2. Baixar o arquivo PDF oficial para a pasta atual (Working Directory)
+#' siconfi_list(action = "download")
 #'
-#' # Reportando `data.frame` com os códigos disponibilizados pelo Tesouro Nacional
-#' siconfi_list() %>%
-#' utils::tail(10)
-#'
-#' # Baixando arquivo (.pdf) disponibilizado pelo Tesouro Nacional
-#' # apresentando lista com os códigos
-#' # siconfi_list(options == "down")
-siconfi_list <- function(options = NULL){
+#' # 3. Baixar o PDF para uma pasta específica do projeto (Cross-platform)
+#' siconfi_list(
+#'   action = "download",
+#'   dest_dir = "C:/meus_dados/referencias"
+#' )
+#' }
+siconfi_list <- function(action = c("view", "download"), dest_dir = getwd()) {
 
-  # Siconfi_table <- "man/ext_data/Cod_instituicoes_siconfi.pdf"
-  # Siconfi_data <- tabulizer::extract_tables(Siconfi_table)
-  #
-  # Siconfi_data <- do.call(rbind, lapply(Siconfi_data, as.data.frame)) %>%
-  #   stats::setNames(.[1,]) %>%
-  #   dplyr::slice(-1)
-  #
-  # saveRDS(Siconfi_data, file = "man/ext_data/Cod_instituicoes_siconfi.rds")
+  # Garante que o usuário digitou uma opção válida (se não digitar, assume "view")
+  action <- match.arg(action)
 
-  # https://raw.githubusercontent.com/Natanaelsl/RREORGFdataR/6e9381012ccb1afad53c80447d56f228f751319e/Cod_instituicoes_siconfi.pdf
+  if (action == "view") {
 
-  # if(!is.null(options) | options != "down") {
-  #
-  #   cli::cli_alert_warning("opção inválida!")
-  #
-  # }
+    # Localiza o arquivo embutido na instalação do pacote
+    data_path <- system.file("extdata", "Cod_instituicoes_siconfi.rds", package = "RREORGFdataR")
 
-  suppressWarnings({
-
-    if(is.null({options})) {
-
-      # Suponha que o arquivo .rds está localizado em inst/extdata dentro do seu pacote
-      data_path <- system.file("extdata", "Cod_instituicoes_siconfi.rds", package = "RREORGFdataR")
-
-
-      # Carregar os dados do arquivo .rds
-      Siconfi_data <- readRDS(data_path)
-      # "R/data/Cod_instituicoes_siconfi.rds"
-
-      # Atribuir o data frame ao ambiente global
-      # assign("Siconfi_data", Siconfi_data, envir = globalenv())
-      return(Siconfi_data)
-
+    # Fail-fast se o arquivo não for encontrado na compilação
+    if (data_path == "") {
+      cli::cli_abort(c(
+        "x" = "O arquivo RDS da base de c\u00f3digos n\u00e3o foi encontrado na instala\u00e7\u00e3o do pacote.",
+        "i" = "Verifique se a pasta {.path inst/extdata/} cont\u00e9m o arquivo {.file Cod_instituicoes_siconfi.rds}."
+      ))
     }
 
-    if({options} == "down") {
+    return(readRDS(data_path))
 
-      url <- "https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf"
+  } else if (action == "download") {
 
-      # Nome do arquivo e extensão
-      filename <- "Cod_instituicoes_siconfi.pdf"
+    url <- "https://siconfi.tesouro.gov.br/siconfi/pages/public/arquivo/conteudo/Cod_instituicoes_siconfi.pdf"
 
-      # Caminho completo para o arquivo a ser baixado
-      path <- utils::choose.dir()
-      caminho_arquivo0 <- file.path(path, filename)
+    # Normaliza o caminho para garantir compatibilidade estrutural (Windows, macOS, Linux)
+    caminho_arquivo <- normalizePath(file.path(dest_dir, "Cod_instituicoes_siconfi.pdf"), mustWork = FALSE)
 
-      caminho_arquivo <- gsub("/", "\\\\", caminho_arquivo0)
+    cli::cli_progress_step("Baixando arquivo PDF do Tesouro Nacional...")
 
+    # tryCatch protege a sessão caso o site do Tesouro caia no momento do download
+    tryCatch({
+      # quiet = TRUE silencia logs feios do base R para dar espaço ao UI do cli
+      utils::download.file(url, destfile = caminho_arquivo, mode = "wb", quiet = TRUE)
+      cli::cli_alert_success("Arquivo salvo com sucesso em: {.path {caminho_arquivo}}")
+    }, error = function(e) {
+      cli::cli_abort(c(
+        "x" = "Falha ao realizar o download do arquivo.",
+        "i" = "Detalhe do erro: {e$message}",
+        "*" = "Verifique sua conex\u00e3o com a internet ou se o URL da API do Tesouro foi descontinuado."
+      ))
+    })
 
-      if (file.exists(path)) {
-        utils::download.file(url, destfile = caminho_arquivo, mode = "wb")
-        cli::cli_alert_info("PDF file successfully downloaded and saved to: \n {.path {caminho_arquivo}}")
-
-
-      } else {
-        cli::cli_alert_danger("The path provided does not exist:\n {.path {caminho_arquivo}}")
-      }
-
-    }
-
-  })
-
+    return(invisible(caminho_arquivo))
+  }
 }

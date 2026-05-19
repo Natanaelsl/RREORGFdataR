@@ -2,7 +2,7 @@
 % Please edit documentation in R/RGFdata.R
 \name{RGFdata}
 \alias{RGFdata}
-\title{RGFdata: Extração intuitiva e fácil dos dados do RGF}
+\title{Extração Inteligente e Vetorizada de Dados do RGF (SICONFI)}
 \usage{
 RGFdata(
   cod.ibge = NULL,
@@ -10,42 +10,79 @@ RGFdata(
   power = NULL,
   period = NULL,
   annex = NULL,
-  simplified = FALSE
+  simplified = FALSE,
+  save_path = NULL
 )
 }
 \arguments{
-\item{cod.ibge}{Código IBGE do Ente. se \code{simplified = TRUE}, então selecione municípios. Para obter todas as UF's utilize "all_states". Para obter todos os municípios utilize "all_muni".}
+\item{cod.ibge}{Código IBGE do Ente. Vetor numérico ou caractere contendo os códigos dos entes.
+Aceita códigos de 1 dígito (União), 2 dígitos (Estados) ou 7 dígitos (Municípios).
+Para obter todas as UF's de forma combinada utilize o atalho \code{"all_states"}. Para obter todos
+os municípios utilize \code{"all_muni"}. Se \code{simplified = TRUE}, selecione municípios compatíveis.}
 
-\item{year}{Exercício do relatório}
+\item{year}{Exercício do relatório. Vetor numérico contendo os anos desejados para a análise (ex: \code{2022:2024}).}
 
-\item{power}{Código do poder. Valores disponíveis: E = Executivo, L = Legislativo, J = Judiciário, M = Ministério Público, D = Defensoria Pública}
+\item{power}{Código do poder. Vetor de caracteres indicando os poderes pretendidos.
+Valores disponíveis: \code{E} = Executivo, \code{L} = Legislativo, \code{J} = Judiciário, \code{M} = Ministério Público, \code{D} = Defensoria Pública.}
 
-\item{period}{Quadrimestre ou semestre de referência do relatório dentro de um exercício. A periodicidade semestral é automaticamente selecionada se \code{simplified = TRUE}.  A periodicidade padrão do relatório é quadrimestral. Valores disponíveis: 1, 2 ou 3.}
+\item{period}{Quadrimestre ou semestre de referência do relatório dentro de um exercício.
+A periodicidade semestral é automaticamente selecionada se \code{simplified = TRUE} (valores aceitos: 1 ou 2).
+A periodicidade padrão do relatório é quadrimestral (valores aceitos: 1, 2 ou 3).}
 
-\item{annex}{Anexos dos demonstrativos do RGF. Valores disponíveis: 1, 2, 3, 4, 5 ou 6.}
+\item{annex}{Anexos dos demonstrativos do RGF. Valores disponíveis: \code{1}, \code{2}, \code{3}, \code{4}, \code{5} ou \code{6}.}
 
-\item{simplified}{Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se \code{TRUE} a periodicidade semestral será automaticamente selecionada.}
+\item{simplified}{Tipo do Demonstrativo. RGF Simplificado aplica-se apenas aos municípios com menos
+de 50 mil habitantes que optaram pela publicação semestral dos relatórios. Se \code{TRUE}, a periodicidade
+semestral será automaticamente assumida e o período 3 passará a ser inválido. Padrão é \code{FALSE}.}
+
+\item{save_path}{Caminho de arquivo opcional em disco (caractere) para persistência imediata dos dados.
+Se a extensão informada for \code{.parquet}, o pacote exige a instalação do pacote \code{arrow}. Também aceita
+extensões \code{.rds} e \code{.csv}. Se omitido (\code{NULL}), os dados são retornados diretamente para a sessão do R.}
+}
+\value{
+Um objeto \code{data.frame} (ou um objeto invisível caso \code{save_path} seja acionado) contendo
+as colunas padronizadas da API do SICONFI empilhadas verticalmente de forma limpa, com as colunas
+do tipo \verb{<MR-X>} devidamente traduzidas para o formato de data real \code{mes/ano}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-Realiza a extração dos dados do Relatório de Gestão Fiscal (RGF) de maneira mais intuitiva e fácil utilizando a API do \href{https://apidatalake.tesouro.gov.br/docs/siconfi/}{SICONFI}.
+Realiza a extração automatizada e em lote dos dados do Relatório de Gestão Fiscal (RGF)
+diretamente da API do SICONFI (Tesouro Nacional). A função resolve nativamente grades
+paramétricas complexas (produto cartesiano de anos, entes, poderes e períodos), otimiza o
+consumo de memória RAM e processa de forma determinística as colunas temporais móveis
+(como a apuração de meses de referência no Anexo 01).
 }
 \examples{
-# install.packages("devtools")
-# devtools::install_github("Natanaelsl/RREORGFdataR")
+\dontrun{
+# 1. Extração básica: Anexo 01 de Goiás (IBGE 52) para o 3º quadrimestre de 2023, todos os poderes
+dados_rgf_go <- RGFdata(
+  cod.ibge = 52,
+  year = 2023,
+  power = c("E", "L", "J", "D", "M"),
+  period = 3,
+  annex = 1,
+  simplified = FALSE
+)
 
-# Carregando o pacote
-library(RREORGFdataR)
+# 2. Extração combinada multivariada em lote
+# Baixa dados do Executivo e Legislativo para os anos 2022 e 2023 em múltiplos quadrimestres
+dados_rgf_multi <- RGFdata(
+  cod.ibge = c(5208707, 5201405),
+  year = 2022:2023,
+  power = c("E", "L"),
+  period = c(1, 2),
+  annex = 1
+)
 
-# Extraindo dados do anexo 1 para o 3º quadrimestre
-# do RGF de 2023 do Estado de Goiás para todos os poderes.
-RGFdata(cod.ibge = 52,
-        year = 2023,
-        power = c('E','L','J','D','M'),
-        period = 3,
-        annex = 1,
-        simplified = FALSE) \%>\%
-        head(., n = 5)
-
+# 3. Ingestão para Data Lake local salvando diretamente em formato Parquet
+RGFdata(
+  cod.ibge = "all_states",
+  year = 2024,
+  power = "E",
+  period = 1:3,
+  annex = 2,
+  save_path = "data/storage/rgf_executivo_estados_2024.parquet"
+)
+}
 }
