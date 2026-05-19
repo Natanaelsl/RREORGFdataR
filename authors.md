@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Natanaelsl/RREORGFdataR/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Natanaelsl/RREORGFdataR/blob/v2.0.0/DESCRIPTION)
 
 Soares Leite N, Maciel de Lima R (2026). *RREORGFdataR: Extração
 intuitiva e fácil do RREO e RGF*. R package version 2.0.0,
