@@ -33,7 +33,7 @@
 #' # 3. Baixar o PDF para uma pasta específica do projeto (Cross-platform)
 #' siconfi_list(
 #'   action = "download",
-#'   dest_dir = "C:/meus_dados/referencias"
+#'   dest_dir = "C:/Temp/"
 #' )
 #' }
 siconfi_list <- function(action = c("view", "download"), dest_dir = getwd()) {

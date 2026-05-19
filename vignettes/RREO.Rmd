@@ -27,7 +27,7 @@ A função `RREOdata()` resolve esse problema de forma definitiva. Além de real
 
 Para iniciar, carregamos os pacotes necessários:
 
-```{r setup, eval = FALSE}
+```{r setup, eval = TRUE, message=FALSE, warning=FALSE}
 library(RREORGFdataR)
 library(dplyr)
 library(ggplot2)
@@ -38,7 +38,7 @@ library(ggplot2)
 
 Neste exemplo, extraímos o Anexo 03 (Demonstrativo da Receita Corrente Líquida) do Estado de Goiás para múltiplos anos, criando uma visualização clara da evolução da arrecadação ao longo do tempo.
 
-```{r ex1-serie-historica, eval = FALSE}
+```{r ex1-serie-historica, eval = TRUE, message=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 # Extraindo dados do 6º bimestre (fechamento anual) de 2020 a 2023
 df_rreo_go <- RREOdata(
   cod.ibge = 52,
@@ -86,7 +86,7 @@ df_rreo_go %>%
 
 A nova arquitetura vetorizada permite passar múltiplos códigos IBGE de uma só vez. Abaixo, comparamos as Despesas Empenhadas (Anexo 01) de três grandes municípios goianos no 1º bimestre de 2023.
 
-```{r ex2-comparacao-entes, eval = FALSE}
+```{r ex2-comparacao-entes, eval = TRUE, message=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 # Passando um vetor de municípios: Goiânia, Aparecida de Goiânia e Anápolis
 df_municipios <- RREOdata(
   cod.ibge = c(5208707, 5201405, 5201108),

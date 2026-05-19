@@ -27,7 +27,7 @@ No entanto, a estrutura bruta retornada pela API muitas vezes exige um tratament
 
 Para iniciar nossas análises, carregamos os pacotes necessários:
 
-```{r setup, eval = FALSE}
+```{r setup, eval = TRUE, message=FALSE, warning=FALSE}
 library(RREORGFdataR)
 library(dplyr)
 library(ggplot2)
@@ -40,7 +40,7 @@ Neste primeiro exemplo, demonstramos o quão simples é utilizar o pacote para o
 
 Extrairemos do Anexo 01 (3º quadrimestre) os valores da Despesa com Pessoal Total (DTP) para o Poder Executivo da União, englobando os anos de 2017 a 2023 de uma só vez utilizando a vetorização do parâmetro `year`.
 
-```{r ex1, eval = FALSE}
+```{r ex1, eval = TRUE, message=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 # Extração da série histórica com um único comando vetorizado
 df_rgf_uniao <- RGFdata(
   cod.ibge = 1,
@@ -95,7 +95,7 @@ Diferente do RREO, o RGF é segregado por Poder governamental. A arquitetura da 
 
 Abaixo, extraímos a DTP de todos os poderes do Estado de Goiás para o encerramento do exercício de 2023.
 
-```{r ex2, eval = FALSE}
+```{r ex2, eval = TRUE, message=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 # Solicitando dados para Executivo, Legislativo, Judiciário, Ministério Público e Defensoria
 df_poderes_go <- RGFdata(
   cod.ibge = 52,
